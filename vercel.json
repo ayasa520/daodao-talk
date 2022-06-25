@@ -1,18 +1,17 @@
 {
+  "name": "daodao",
   "version": 2,
-  "env": {
-  },
+  "public": true,
   "builds": [
     {
-      "src": "dist/app.js",
-      "use": "@vercel/node",
-      "config": { "includeFiles": ["dist/**"] }
+      "src": "src/app.ts",
+      "use": "@vercel/node"
     }
   ],
   "routes": [
     {
-      "src": "/api/(.*)",
-      "dest": "dist/app.js"
+      "src": "/(.*)",
+      "dest": "/src/app.ts"
     }
   ]
 }

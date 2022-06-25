@@ -1,8 +1,6 @@
 // External Dependencies
 import express, { Request, Response } from "express";
-import {  Collection, ObjectId, OptionalId } from "mongodb";
-import { collections } from "../service/database";
-import Post from "../models/post";
+import postModel  from "../models/post";
 
 
 // Global Config
@@ -14,10 +12,8 @@ postRouter.use(express.json());
 
 // GET
 postRouter.get("/", async (_req: Request, res: Response) => {
-    const posts: Collection<OptionalId<Post>> = collections.posts as Collection<OptionalId<Post>>
     try {
-       const post =
-       (await posts.find({}).toArray()) as Post[]
+       const post = await postModel.find({})
         res.status(200).send(post);
     } catch (error: any) {
         res.status(500).send(error.message);
@@ -26,32 +22,29 @@ postRouter.get("/", async (_req: Request, res: Response) => {
 
 // GET  
 postRouter.get("/:id", async (req: Request, res: Response) => {
-    const id = req?.params?.id;
-
-    const posts: Collection<OptionalId<Post>> = collections.posts as Collection<OptionalId<Post>>
+    const {id} = req.params;
     try {
         
-        const query = { _id: new ObjectId(id) };
-        const post = (await posts.findOne(query)) as Post;
+        const query = { _id: id };
+        const post = await postModel.findOne(query);
 
         if (post) {
             res.status(200).send(post);
         }
     } catch (error) {
-        res.status(404).send(`Unable to find matching document with id: ${req.params.id}`);
+        res.status(404).send(`Unable to find matching document with id: ${id}`);
     }
 });
 
 //POST 
 postRouter.post("/", async (req: Request, res: Response) => {
-    const posts: Collection<OptionalId<Post>> = collections.posts as Collection<OptionalId<Post>>
     try {
-        const newPost = {"text": req.body.text, "time":new Date()} as Post;
-        const result = await posts.insertOne(newPost);
+        const {text} = req.body;
+        const result = await postModel.create({text});
 
         result
-            ? res.status(201).send(`Successfully created a new game with id ${result.insertedId}`)
-            : res.status(500).send("Failed to create a new game.");
+            ? res.status(201).send(`Successfully created a new post with id ${result}`)
+            : res.status(500).send("Failed to create a new post.");
     } catch (error: any) {
         console.error(error);
         res.status(400).send(error.message);
@@ -60,17 +53,16 @@ postRouter.post("/", async (req: Request, res: Response) => {
 
 // PUT
 postRouter.put("/:id", async (req: Request, res: Response) => {
-    const posts: Collection<OptionalId<Post>> = collections.posts as Collection<OptionalId<Post>>
-    const id = req?.params?.id;
+    const {id} = req.params;
+    const {text} = req.body;
 
     try {
-        const updatedPost: Post = req.body as Post;
-        const query = { _id: new ObjectId(id) };
+        const query = { _id: id };
       
-        const result = await posts.updateOne(query, { $set: updatedPost });
+        const result = await postModel.updateOne(query, {text});
 
         result
-            ? res.status(200).send(`Successfully updated game with id ${id}`)
+            ? res.status(200).send(`Successfully updated post with id ${id}`)
             : res.status(304).send(`Post with id: ${id} not updated`);
     } catch (error: any) {
         console.error(error.message);
@@ -80,19 +72,18 @@ postRouter.put("/:id", async (req: Request, res: Response) => {
 
 // DELETE
 postRouter.delete("/:id", async (req: Request, res: Response) => {
-    const id = req?.params?.id;
-    const posts: Collection<OptionalId<Post>> = collections.posts as Collection<OptionalId<Post>>
+    const {id} = req.params;
 
     try {
-        const query = { _id: new ObjectId(id) };
-        const result = await posts.deleteOne(query);
+        const query = { _id: id };
+        const result = await postModel.deleteOne(query);
 
         if (result && result.deletedCount) {
-            res.status(202).send(`Successfully removed game with id ${id}`);
+            res.status(202).send(`Successfully removed post with id ${id}`);
         } else if (!result) {
-            res.status(400).send(`Failed to remove game with id ${id}`);
+            res.status(400).send(`Failed to remove post with id ${id}`);
         } else if (!result.deletedCount) {
-            res.status(404).send(`Game with id ${id} does not exist`);
+            res.status(404).send(`post with id ${id} does not exist`);
         }
     } catch (error: any) {
         console.error(error.message);
