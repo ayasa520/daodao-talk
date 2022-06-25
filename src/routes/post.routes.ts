@@ -1,6 +1,6 @@
 // External Dependencies
 import express, { Request, Response } from "express";
-import postModel  from "../models/post";
+import postModel  from "../models/post.schema";
 
 
 // Global Config

@@ -1,6 +1,6 @@
 import express, {Application} from 'express'
 import cookieParser from 'cookie-parser'
-import {postRouter} from './routes/posts'
+import {postRouter} from './routes/post.routes'
 import dotenv from 'dotenv'
 import cors from 'cors';
 
