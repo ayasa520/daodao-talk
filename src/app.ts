@@ -1,28 +1,37 @@
-import express, {Application, Request, Response, NextFunction, Router} from 'express'
-import path from 'path';
-import sqlite3, {Database} from 'sqlite3'
+import express, {Application} from 'express'
 import cookieParser from 'cookie-parser'
-import indexRouter from './routes/index'
-import apiRouter from './routes/api'
+import {postRouter} from './routes/posts'
+import { connectToDatabase } from "./service/database"
+import dotenv from 'dotenv'
 
-const db: Database = new sqlite3.Database('/home/rikka/project/lingmeng/src/money.db', () => {});
+
+if(process.env.NODE_ENV === 'development'){
+    //开发环境, 为了部署在 vercel 方便, 所以生产环境的配置不在文件里做
+    dotenv.config()
+}
+
 const app: Application = express();
-const sql1 = db.prepare("update reimu set money = money + 1000");
-
-var logger = require('morgan');
 
 
-
-app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, '../public')));
 
-app.use('/', indexRouter);
-app.use('/api', apiRouter);
+const {PORT = 5000} = process.env
 
 
-const {PORT = 3000} = process.env
-app.listen(PORT,()=>console.log('Server running'));
+connectToDatabase()
+    .then(() => {
+
+        app.use("/api/posts", postRouter);
+
+        app.listen(PORT, () => {
+            console.log(`Server started at http://localhost:${PORT}`);
+        });
+    })
+    .catch((error: Error) => {
+        console.error("Database connection failed", error);
+        process.exit();
+    });
+
 export default app
