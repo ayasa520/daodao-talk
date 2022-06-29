@@ -1,17 +1,5 @@
 {
-  "name": "daodao",
   "version": 2,
-  "public": true,
-  "builds": [
-    {
-      "src": "src/app.ts",
-      "use": "@vercel/node"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "/src/app.ts"
-    }
-  ]
+  "builds": [{ "src": "dist/app.js", "use": "@now/node" }],
+  "routes": [{ "src": "/(.*)", "dest": "dist/app.js" }]
 }
