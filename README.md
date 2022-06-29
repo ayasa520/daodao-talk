@@ -28,3 +28,23 @@ npm run build
 ```bash
 npm start
 ```
+
+
+
+api
+
+1. GET 所有文档
+https://daodao-talk.vercel.app/api/posts 
+
+2. GET 某 id
+https://daodao-talk.vercel.app/api/posts/:id
+
+3. POST 增加新文档
+https://daodao-talk.vercel.app/api/posts
+
+4. PUT 修改某文档
+https://daodao-talk.vercel.app/api/posts/:id
+
+5. DELETE 删除文档
+https://daodao-talk.vercel.app/api/posts/:id
+
