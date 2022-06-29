@@ -6,7 +6,8 @@
   "scripts": {
     "build": "npx webpack",
     "start": "cross-env NODE_ENV=production node ./dist/app.js",
-    "dev": "cross-env NODE_ENV=development  nodemon -r ts-node/register/transpile-only -r tsconfig-paths/register --inspect ./src/app.ts"
+    "dev": "cross-env NODE_ENV=development  nodemon -r ts-node/register/transpile-only -r tsconfig-paths/register --inspect ./src/app.ts",
+    "deploy": "vercel -e NODE_ENV=production --prod"
   },
   "keywords": [],
   "author": "",
