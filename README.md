@@ -46,7 +46,7 @@ https://daodao-talk.vercel.app/api/posts/:id
 
 
 
-由于使用了 `babel-plugin-root-import` 来消除相对路径的 import, 而 vercel 是无法识别的, 所以更改为部署编译后的 js 代码(之前 vercel 上直接部署 ts: https://github.com/ayasa520/daodao-talk/tree/0050e1e188bfb799036c1417fc4b17e1f28051ce). tsc 编译不会将 tsconfig.json 定义的路径别名翻译成实际的路径, 所以使用 webpack 打包转换自定义的根目录前缀. 然而还是有点问题, 如果要这样写 vercel.json
+由于在 tsconfig.json 中定义了路径别名('src' 与 '@') 来消除相对路径的 import, 而 vercel 是无法识别的, 所以更改为部署编译后的 js 代码(之前 vercel 上直接部署 ts: https://github.com/ayasa520/daodao-talk/tree/0050e1e188bfb799036c1417fc4b17e1f28051ce). tsc 编译不会将 tsconfig.json 定义的路径别名翻译成实际的路径, 所以使用 webpack 打包转换自定义的根目录前缀. 然而还是有点问题, 如果要这样写 vercel.json
 
 ```json
 {
