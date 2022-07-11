@@ -1,5 +1,5 @@
 {
-  "name": "daodao",
+  "name": "daodao-talk",
   "version": "1.0.0",
   "description": "TypeScript + MongoDB 实现一个类似 '说说' 的应用 (后端)",
   "main": "./dist/app.js",

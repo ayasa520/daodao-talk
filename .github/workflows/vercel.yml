@@ -16,9 +16,9 @@ jobs:
       - uses: JS-DevTools/npm-publish@v1
         with:
           token: ${{ secrets.NPM_TOKEN }}          
-      - name: Deploy to Vercel
-        run: npx vercel -e NODE_ENV=production --token ${VERCEL_TOKEN} --prod
-        env:
-            VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-            VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-            VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      # - name: Deploy to Vercel
+      #   run: npx vercel -e NODE_ENV=production --token ${VERCEL_TOKEN} --prod
+      #   env:
+      #       VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      #       VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+      #       VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
