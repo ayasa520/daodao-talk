@@ -66,3 +66,15 @@ https://daodao-talk.vercel.app/api/posts/:id
 只能是 `npm run build` 后, 再手动 `vercel --prod` 部署才能成功. vercel 自动去 Github 拉代码然后 build 虽然可以成功编译 ts 文件, 但是服务启动是失败的(404).
 
 每次更改完代码都要自己手动部署很麻烦, 所以使用 Github Action 来完成这件事
+
+
+
+vim 上调试需要, nodemon 不知为何不行了
+
+```
+npx cross-env NODE_ENV=development node -r ts-node/register/transpile-only -r tsconfig
+-paths/register --inspect-brk ./src/app.ts 
+```
+
+
+关于认证和鉴权, 使用双 token, 服务端存储 session 来确定 refreshToken 的有效性. 这个是抄的油管上的, 我其实有些困惑, 既然都保存状态了, 干脆不用 jwt 得了

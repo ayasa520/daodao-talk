@@ -1,26 +1,34 @@
-import express, { Application } from 'express';
+import express, { Express } from 'express';
 import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
 import cors from 'cors';
 
-import postRouter from '@/routes/post.routes';
+// @ 为 src
+import connect from '@/utils/connect';
+import logger from '@/utils/logger';
+import routes from '@/routes';
 
-if (process.env.NODE_ENV === 'development') {
-  // 开发环境, 为了部署在 vercel 方便, 所以生产环境的配置不在文件里做
-  dotenv.config();
-}
+dotenv.config();
 
-const app: Application = express();
+const app: Express = express();
 
-app.use(express.json());
+// 连接数据库
+connect()
+  .then(() => {
+    logger.info(`Connect to ${process.env.DB_CONN_STRING}`);
+  })
+  .catch((err) => logger.error(err));
+
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(cors());
-app.use('/api/posts', postRouter);
+app.use(express.json());
+app.use(cookieParser(process.env.COOKIE_SECRET as string));
+app.use(cors({ origin: process.env.ALLOW_DOMAIN as string }));
+app.use(routes);
 
 const { PORT = 5000 } = process.env;
-app.listen(PORT, () => {
-  process.stdout.write(`Server started at http://localhost:${PORT}`);
+
+app.listen(PORT, async () => {
+  logger.info(`Server started at http://localhost:${PORT}`);
 });
 
 export default app;
