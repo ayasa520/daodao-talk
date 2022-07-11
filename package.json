@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "build": "npx webpack --devtool source-map",
-    "start": "cross-env NODE_ENV=production node ./dist/app.js",
-    "dev": "npx cross-env NODE_ENV=development nodemon -r ts-node/register/transpile-only -r tsconfig-paths/register ./src/app.ts",
+    "start": "cross-env NODE_ENV=production node ./dist/app.js | pino-pretty",
+    "dev": "npx cross-env NODE_ENV=development nodemon -r ts-node/register/transpile-only -r tsconfig-paths/register ./src/app.ts | pino-pretty",
     "dev:debug": "npx cross-env NODE_ENV=development node -r ts-node/register/transpile-only -r tsconfig-paths/register --inspect-brk ./src/app.ts",
     "deploy": "npx vercel -e NODE_ENV=production --prod"
   },
