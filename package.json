@@ -1,8 +1,11 @@
 {
   "name": "daodao",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "TypeScript + MongoDB 实现一个类似 '说说' 的应用 (后端)",
+  "main": "./dist/app.js",
+  "files": [
+    "/dist"
+  ],
   "scripts": {
     "build": "npx webpack --devtool source-map",
     "start": "cross-env NODE_ENV=production node ./dist/app.js | pino-pretty",
