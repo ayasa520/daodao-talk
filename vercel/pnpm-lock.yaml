@@ -1,10 +1,10 @@
 lockfileVersion: 5.4
 
 specifiers:
-  daodao-talk: ^1.0.0
+  daodao-talk: ^1.0.1
 
 dependencies:
-  daodao-talk: 1.0.0
+  daodao-talk: 1.0.1
 
 packages:
 
@@ -921,8 +921,8 @@ packages:
     resolution: {integrity: sha512-sdQSFB7+llfUcQHUQO3+B8ERRj0Oa4w9POWMI/puGtuf7gFywGmkaLCElnudfTiKZV+NvHqL0ifzdrI8Ro7ESA==}
     dev: false
 
-  /daodao-talk/1.0.0:
-    resolution: {integrity: sha512-65rHun3tzaD5yjHb6HkGU5yf4EK+Pyh5FU6Ad2nJLOPVs0VDneZk3c6CH991X3SVJUherImHu0po9938y148zw==}
+  /daodao-talk/1.0.1:
+    resolution: {integrity: sha512-/kUewYeZqBDXfXRQtIrTiBqO4AJLC7X+bS7dbCv89Fow4qlubmeaQt3P/Pl38NCKq/1DOayJRDL7sA1dsMiRRg==}
     dependencies:
       '@babel/core': 7.18.6
       '@types/marked': 4.0.3
@@ -932,6 +932,7 @@ packages:
       dayjs: 1.11.3
       debug: 4.3.4
       dotenv: 16.0.1
+      dynamic-middleware: 4.0.4
       eslint-plugin-jsx-a11y: 6.6.0
       eslint-plugin-react: 7.30.1
       eslint-plugin-react-hooks: 4.6.0
@@ -1057,6 +1058,10 @@ packages:
 
   /duplexer3/0.1.5:
     resolution: {integrity: sha512-1A8za6ws41LQgv9HrE/66jyC5yuSjQ3L/KOpFtoBilsAK2iA2wuS5rTt1OCzIvtS2V7nVmedsUU+DGRcjBmOYA==}
+    dev: false
+
+  /dynamic-middleware/4.0.4:
+    resolution: {integrity: sha512-rjYIgXpu+CNOOQ6wAW8tNJsz7sr7sjNCBKAVsCYE9ehvEAhM4x2A4pT+5wJHPIWOvuZHuXUEBvitquU1mm5/gQ==}
     dev: false
 
   /ecdsa-sig-formatter/1.0.11:
