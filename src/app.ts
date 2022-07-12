@@ -9,7 +9,7 @@ import routes from '@/routes';
 import { Config } from '@/config/config';
 
 logger.info('app');
-const config = Config.getConfig({ override: true });
+const config = Config.getConfig();
 const app: Express = express();
 
 // 连接数据库
