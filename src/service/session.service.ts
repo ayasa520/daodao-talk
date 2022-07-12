@@ -7,7 +7,10 @@ import { signJwt, verifyJwt } from '@/utils/jwt.utils';
 import { findUser } from '@/service/user.service';
 import { User } from '@/models/user.model';
 import logger from '@/utils/logger';
+import { Config } from '@/config/config';
 
+logger.info('session');
+const config = Config.getConfig();
 export async function createSession(userId: string, userAgent: string) {
   const session = await SessionModel.create({ user: userId, userAgent });
   return session.toJSON();
@@ -61,8 +64,9 @@ export async function refreshAccessToken(
     {
       uid: user._id,
       sid: session._id,
-      admin: user.admin
+      admin: user.admin,
     },
-    { expiresIn: process.env.ACCESS_TOKEN_TTL }
+    // { expiresIn: process.env.ACCESS_TOKEN_TTL }
+    { expiresIn: config.get('ACCESS_TOKEN_TTL') as string }
   );
 }

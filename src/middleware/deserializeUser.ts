@@ -1,12 +1,10 @@
 import { NextFunction, Request, Response } from 'express';
 import { get } from 'lodash';
-import dotenv from 'dotenv';
 
 import { verifyJwt } from '@/utils/jwt.utils';
 import { refreshAccessToken } from '@/service/session.service';
 import logger from '@/utils/logger';
 
-dotenv.config();
 // 从 token 中解码出用户信息
 export const deserializeUser = async (
   req: Request,

@@ -1,9 +1,13 @@
 import mongoose from 'mongoose';
 
 import logger from '@/utils/logger';
+import { Config } from '@/config/config';
+
+const config = Config.getConfig();
 
 async function connect() {
-  const dbUri = process.env.DB_CONN_STRING as string;
+  // const dbUri = process.env.DB_CONN_STRING as string;
+  const dbUri = config.get('DB_CONN_STRING') as string;
 
   // 或者
   // return mongoose

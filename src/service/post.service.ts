@@ -22,7 +22,7 @@ export async function createPost(
   return newPost;
 }
 export async function findPost(postId: string) {
-    return PostModel.findOne({ _id: postId }).lean();
+  return PostModel.findOne({ _id: postId }).lean();
 }
 export async function findAll() {
   const query = await PostModel.find({});

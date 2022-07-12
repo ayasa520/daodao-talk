@@ -1,1 +1,1 @@
-module.exports = require('daodao-talk') 
+module.exports = require('daodao-talk');

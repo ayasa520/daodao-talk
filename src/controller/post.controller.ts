@@ -7,8 +7,7 @@ import {
   findAll,
   findPost,
 } from '@/service/post.service';
-import postModel, { Post } from '@/models/post.model';
-import logger from '@/utils/logger';
+import { Post } from '@/models/post.model';
 
 export async function createPostsHandler(
   req: Request<unknown, unknown, CreatePostInput['body']>,

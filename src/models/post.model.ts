@@ -10,7 +10,7 @@ export interface Post {
   _id: mongoose.Types.ObjectId;
   uid: User['_id']; // 用户 id
   replies: [mongoose.Types.ObjectId];
-  rid?: Post['_id']; // 该层评论的 id
+  rid?: Post['_id']; // root id
   pid?: Post['_id']; // 直接回复的 id
   valid: boolean;
   content: string;

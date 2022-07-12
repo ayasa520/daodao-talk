@@ -1,5 +1,4 @@
 /* eslint no-underscore-dangle: ["error", { "allow": ["_id"] }] */
-import { pick } from 'lodash';
 import dotenv from 'dotenv';
 import { Request, Response } from 'express';
 
@@ -11,8 +10,9 @@ import {
   updateSession,
 } from '@/service/session.service';
 import { signJwt } from '@/utils/jwt.utils';
+import { Config } from '@/config/config';
 
-dotenv.config();
+const config = Config.getConfig();
 
 export async function createSessionHandler(req: Request, res: Response) {
   // Validate the user's password
@@ -37,7 +37,8 @@ export async function createSessionHandler(req: Request, res: Response) {
       sid: session._id,
       admin: user.admin,
     },
-    { expiresIn: process.env.ACCESS_TOKEN_TTL }
+    // { expiresIn: process.env.ACCESS_TOKEN_TTL }
+    { expiresIn: config.get('ACCESS_TOKEN_TTL') as string }
   );
   // create a refresh token
 
@@ -47,7 +48,8 @@ export async function createSessionHandler(req: Request, res: Response) {
       sid: session._id,
       admin: user.admin,
     },
-    { expiresIn: process.env.REFRESH_TOKEN_TTL }
+    // { expiresIn: process.env.REFRESH_TOKEN_TTL }
+    { expiresIn: config.get('REFRESH_TOKEN_TTL') as string }
   );
 
   // return access & refresh token
