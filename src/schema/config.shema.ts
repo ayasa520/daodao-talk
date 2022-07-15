@@ -13,12 +13,6 @@ export const createConfigSchema = object({
     POST_COMMENT_ALLOW: string(),
     GET_COMMENT_ALLOW: string(),
     DELETE_COMMENT_ALLOW: string(),
-    DAO_TOKEN: string(),
-    DAO_PROJECT_NAME: string(),
-  }).refine((data) => {
-    const s = data.DAO_PROJECT_NAME.trim();
-    const s1 = data.DAO_TOKEN.trim();
-    return (s === '' && s1 === '') || (s !== '' && s1 !== '');
-  }),
+  })
 });
 export type CreateConfigInput = TypeOf<typeof createConfigSchema>;
