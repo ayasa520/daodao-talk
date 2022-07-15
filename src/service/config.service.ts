@@ -9,7 +9,7 @@ const config = Config.getConfig();
 
 // 所有字段变成可选, 但是之前中间件已经检查过必要的, 所以不用担心
 export async function createConfig(input: ConfigType) {
-  if (!process.env.VERCEL) {
+  if (!process.env.DAO_TOKEN) {
     // 服务器或者本地
     const envPath = path.resolve(process.cwd(), '.env');
     let configString = '';

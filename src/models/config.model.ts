@@ -11,6 +11,7 @@ export interface Config {
   POST_COMMENT_ALLOW: string;
   GET_COMMENT_ALLOW: string;
   DELETE_COMMENT_ALLOW: string;
-  VERCEL_TOKEN: string;
-  VERCEL_PROJECT_ID: string;
+  // 起始时已经配置
+  // DAO_TOKEN: string;
+  // DAO_PROJECT_NAME: string;
 }

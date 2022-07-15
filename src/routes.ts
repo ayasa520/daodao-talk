@@ -24,11 +24,11 @@ const routes = Router();
 routes.use(deserializeUser);
 
 routes.get('/', (req: Request, res: Response) => {
-  if (config.getConfigCount() !== 0) {
+  if (config.check()) {
     return res.send('配置已完成');
   }
 
-  return res.status(500).send('配置未完成');
+  return res.status(500).send('尚有配置未完成');
 });
 
 routes.get('/api/config', auth('all'), getConfigHandler);

@@ -13,11 +13,11 @@ export const createConfigSchema = object({
     POST_COMMENT_ALLOW: string(),
     GET_COMMENT_ALLOW: string(),
     DELETE_COMMENT_ALLOW: string(),
-    VERCEL_TOKEN: string(),
-    VERCEL_PROJECT_ID: string(),
+    DAO_TOKEN: string(),
+    DAO_PROJECT_NAME: string(),
   }).refine((data) => {
-    const s = data.VERCEL_PROJECT_ID.trim();
-    const s1 = data.VERCEL_TOKEN.trim();
+    const s = data.DAO_PROJECT_NAME.trim();
+    const s1 = data.DAO_TOKEN.trim();
     return (s === '' && s1 === '') || (s !== '' && s1 !== '');
   }),
 });

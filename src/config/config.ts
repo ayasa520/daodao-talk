@@ -45,14 +45,7 @@ export class Config {
 
   public async load() {
     let parsed: dotenv.DotenvParseOutput = {};
-    logger.info(process.env.VERCEL_PROJECT_ID);
-    logger.info(process.env.VERCEL_TOKEN);
-    logger.info(process.env.VERCEL);
-    if (
-      process.env.VERCEL_PROJECT_ID
-      && process.env.VERCEL_TOKEN
-      && process.env.VERCEL
-    ) {
+    if (process.env.DAO_PROJECT_NAME && process.env.DAO_TOKEN) {
       // 在 vercel 部署. 通过 vercel api 读取环境变量. 主要是因为直接 process.env 不会更新
       // 更改配置是变快了, 但是如果很少更改的话, 可能比直接读 process.env 的体验要差
       // 不过我看其他几个项目有用外置数据库存储配置的, 那样可能更慢
@@ -60,8 +53,8 @@ export class Config {
       const configs = await new Vercel({
         // 这里从 process.env 读取是因为 config 是依赖 vercel api 的, 不能由 vercel api 依赖 config
         // 也就是说项目至少需要重新部署一次, load 才能正确运行(读到 token 和 projectId)
-        vercelToken: process.env.VERCEL_TOKEN,
-        vercelProjectId: process.env.VERCEL_PROJECT_ID,
+        vercelToken: process.env.DAO_TOKEN,
+        vercelProjectName: process.env.DAO_PROJECT_NAME,
       }).getEnvironments();
 
       if (configs) {
@@ -112,6 +105,20 @@ export class Config {
     //   });
 
     await mongoose.connect(dbUri);
+  }
+
+  public check() {
+    // 检查运行必须的配置. 后两项是vercel初始化之前就确定的
+    return (
+      this.configMap.get('DB_CONN_STRING')
+      && this.configMap.get('ALLOW_DOMAIN')
+      && this.configMap.get('SECRET')
+      && this.configMap.get('COOKIE_SECRET')
+      && (process.env.DAO_TOKEN
+        ? this.configMap.get('DAO_PROJECT_NAME')
+          && this.configMap.get('DAO_TOKEN')
+        : true)
+    );
   }
 
   public get(key: string) {

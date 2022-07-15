@@ -5,14 +5,14 @@ import logger from '@/utils/logger';
 export class Vercel {
   private vercelToken: string;
 
-  private vercelProjectId: string;
+  private vercelProjectName: string;
 
   public constructor(option?: {
     vercelToken: string;
-    vercelProjectId: string;
+    vercelProjectName: string;
   }) {
     if (option) {
-      this.vercelProjectId = option.vercelProjectId;
+      this.vercelProjectName = option.vercelProjectName;
       this.vercelToken = option.vercelToken;
     }
   }
@@ -25,16 +25,16 @@ export class Vercel {
       type: 'encrypted';
     }[]
   ) {
-    const find1 = configs.find((o) => o.key === 'VERCEL_PROJECT_ID');
-    const find2 = configs.find((o) => o.key === 'VERCEL_TOKEN');
+    const find1 = configs.find((o) => o.key === 'DAO_PROJECT_NAME');
+    const find2 = configs.find((o) => o.key === 'DAO_TOKEN');
     if (find1 && find2) {
-      this.vercelProjectId = find1.value;
+      this.vercelProjectName = find1.value;
       this.vercelToken = find2.value;
     }
     const data = JSON.stringify(configs);
     const config = {
       method: 'post',
-      url: `https://api.vercel.com/v8/projects/${this.vercelProjectId}/env`,
+      url: `https://api.vercel.com/v8/projects/${this.vercelProjectName}/env`,
       headers: {
         Authorization: `Bearer ${this.vercelToken}`,
         'Content-Type': 'application/json',
@@ -60,7 +60,7 @@ export class Vercel {
 
   public getAliasOfAProject() {
     const data = JSON.stringify({
-      projectId: this.vercelProjectId,
+      projectId: this.vercelProjectName,
     });
     const config = {
       method: 'get',
@@ -75,17 +75,15 @@ export class Vercel {
   }
 
   public async redeploy() {
-    const deployment = await this.getDeployments();
-    const gitMeta = deployment.data.deployments[0].meta;
     const data = JSON.stringify({
       name: '',
-      project: this.vercelProjectId,
+      project: this.vercelProjectName,
       target: 'production',
       gitSource: {
-        type: 'github',
-        repo: gitMeta.githubRepo,
-        ref: 'main',
-        repoId: gitMeta.githubRepoId,
+        type: process.env.VERCEL_GIT_PROVIDER,
+        repo: process.env.VERCEL_GIT_REPO_SLUG,
+        ref: process.env.VERCEL_GIT_COMMIT_REF,
+        repoId: process.env.VERCEL_GIT_REPO_ID,
       },
     });
     const config = {
@@ -103,7 +101,7 @@ export class Vercel {
   public async getEnvironments() {
     const config = {
       method: 'get',
-      url: `https://api.vercel.com/v8/projects/${this.vercelProjectId}/env?decrypt=true`,
+      url: `https://api.vercel.com/v8/projects/${this.vercelProjectName}/env?decrypt=true`,
       headers: {
         Authorization: `Bearer ${this.vercelToken}`,
         'Content-Type': 'application/json',
