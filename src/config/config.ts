@@ -2,6 +2,7 @@ import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 
 import logger from '@/utils/logger';
+import { Vercel } from '@/utils/vercel';
 
 /**
  * 单例配置类
@@ -18,7 +19,9 @@ export class Config {
   >();
 
   private constructor() {
-    this.load();
+    this.load().then(() => {
+      logger.info('启动');
+    });
   }
 
   public static getConfig() {
@@ -40,41 +43,57 @@ export class Config {
     return JSON.stringify(obj);
   }
 
-  public load() {
-    // 如果存在 .enva, 会读入 process.env. 否则应手动设置环境变量
-
-    if (process.env.VERCEL_TOKEN) {
+  public async load() {
+    let parsed: dotenv.DotenvParseOutput = {};
+    if (
+      process.env.VERCEL
+      && process.env.VERCEL_TOKEN
+      && process.env.VERCEL_PROJECT_ID
+    ) {
       // 在 vercel 部署. 通过 vercel api 读取环境变量. 主要是因为直接 process.env 不会更新
-    } else {
-      const dotenvConfigOutput = dotenv.config({ override: true });
-      // 在服务器部署
-      if (dotenvConfigOutput.parsed) {
-        // 存在 .enva 文件
-        Object.keys(dotenvConfigOutput.parsed).forEach((key) => {
-          // logger.info(`${key} ${process.env[key]}`);
-          this.configMap.set(key, process.env[key]);
-        });
-      }
+      // 更改配置是变快了, 但是如果很少更改的话, 可能比直接读 process.env 的体验要差
+      // 不过我看其他几个项目有用外置数据库存储配置的, 那样可能更慢
+      logger.info('vercel 环境');
+      const configs = await new Vercel({
+        // 这里从 process.env 读取是因为 config 是依赖 vercel api 的, 不能由 vercel api 依赖 config
+        // 也就是说项目至少需要重新部署一次, load 才能正确运行(读到 token 和 projectId)
+        vercelToken: process.env.VERCEL_TOKEN,
+        vercelProjectId: process.env.VERCEL_PROJECT_ID,
+      }).getEnvironments();
 
-      this.connect()
-        .then(() => {
-          logger.info(
-            `Connected to DB ${this.configMap.get('DB_CONN_STRING')}`
-          );
-        })
-        .catch(() => {
-          logger.info(
-            `Cannot connected to DB ${this.configMap.get('DB_CONN_STRING')}`
-          );
-        });
+      if (configs) {
+        parsed = dotenv.parse(configs);
+      }
+    } else {
+      // 在服务器部署
+      // 存在 .env 文件
+      const dotenvConfigOutput = dotenv.config({ override: true });
+      if (dotenvConfigOutput.parsed) {
+        parsed = dotenvConfigOutput.parsed;
+      }
     }
+    if (parsed) {
+      Object.keys(parsed).forEach((key) => {
+        this.configMap.set(key, parsed[key]);
+      });
+    }
+
+    this.connect()
+      .then(() => {
+        logger.info(`Connected to DB ${this.configMap.get('DB_CONN_STRING')}`);
+      })
+      .catch(() => {
+        logger.error(
+          `Cannot connected to DB ${this.configMap.get('DB_CONN_STRING')}`
+        );
+      });
   }
 
   public async connect() {
     try {
       await mongoose.disconnect();
     } catch (e) {
-      logger.info(e);
+      logger.error(e);
     }
     const dbUri = this.configMap.get('DB_CONN_STRING') as string;
     // 或者

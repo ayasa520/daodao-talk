@@ -14,9 +14,9 @@ export const createConfigSchema = object({
     GET_COMMENT_ALLOW: string(),
     DELETE_COMMENT_ALLOW: string(),
     VERCEL_TOKEN: string(),
-    VERCEL_PROJECT_NAME: string(),
+    VERCEL_PROJECT_ID: string(),
   }).refine((data) => {
-    const s = data.VERCEL_PROJECT_NAME.trim();
+    const s = data.VERCEL_PROJECT_ID.trim();
     const s1 = data.VERCEL_TOKEN.trim();
     return (s === '' && s1 === '') || (s !== '' && s1 !== '');
   }),

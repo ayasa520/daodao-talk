@@ -12,5 +12,5 @@ export interface Config {
   GET_COMMENT_ALLOW: string;
   DELETE_COMMENT_ALLOW: string;
   VERCEL_TOKEN: string;
-  VERCEL_PROJECT_NAME: string;
+  VERCEL_PROJECT_ID: string;
 }

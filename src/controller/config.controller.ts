@@ -24,7 +24,6 @@ export async function createConfigController(
     return res.send('已经配置完毕, 无需重新配置');
   }
   try {
-    logger.info(req.body);
     await createConfig(req.body);
     return res.send('已经配置完毕');
   } catch (e) {
