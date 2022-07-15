@@ -45,10 +45,13 @@ export class Config {
 
   public async load() {
     let parsed: dotenv.DotenvParseOutput = {};
+    logger.info(process.env.VERCEL_PROJECT_ID);
+    logger.info(process.env.VERCEL_TOKEN);
+    logger.info(process.env.VERCEL);
     if (
-      process.env.VERCEL
+      process.env.VERCEL_PROJECT_ID
       && process.env.VERCEL_TOKEN
-      && process.env.VERCEL_PROJECT_ID
+      && process.env.VERCEL
     ) {
       // 在 vercel 部署. 通过 vercel api 读取环境变量. 主要是因为直接 process.env 不会更新
       // 更改配置是变快了, 但是如果很少更改的话, 可能比直接读 process.env 的体验要差
@@ -67,6 +70,7 @@ export class Config {
     } else {
       // 在服务器部署
       // 存在 .env 文件
+      logger.info('服务器环境');
       const dotenvConfigOutput = dotenv.config({ override: true });
       if (dotenvConfigOutput.parsed) {
         parsed = dotenvConfigOutput.parsed;
