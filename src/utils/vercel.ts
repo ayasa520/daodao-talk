@@ -7,14 +7,9 @@ export class Vercel {
 
   private vercelProjectName: string;
 
-  public constructor(option?: {
-    vercelToken: string;
-    vercelProjectName: string;
-  }) {
-    if (option) {
-      this.vercelProjectName = option.vercelProjectName;
-      this.vercelToken = option.vercelToken;
-    }
+  public constructor() {
+    this.vercelToken = process.env.DAO_TOKEN || '';
+    this.vercelProjectName = process.env.DAO_PROJECT_NAME || '';
   }
 
   public async setEnvironments(
@@ -25,12 +20,6 @@ export class Vercel {
       type: 'encrypted';
     }[]
   ) {
-    const find1 = configs.find((o) => o.key === 'DAO_PROJECT_NAME');
-    const find2 = configs.find((o) => o.key === 'DAO_TOKEN');
-    if (find1 && find2) {
-      this.vercelProjectName = find1.value;
-      this.vercelToken = find2.value;
-    }
     const data = JSON.stringify(configs);
     const config = {
       method: 'post',
@@ -42,7 +31,6 @@ export class Vercel {
       data,
     };
     await axios(config);
-    await this.redeploy();
     return true;
   }
 

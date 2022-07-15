@@ -50,12 +50,7 @@ export class Config {
       // 更改配置是变快了, 但是如果很少更改的话, 可能比直接读 process.env 的体验要差
       // 不过我看其他几个项目有用外置数据库存储配置的, 那样可能更慢
       logger.info('vercel 环境');
-      const configs = await new Vercel({
-        // 这里从 process.env 读取是因为 config 是依赖 vercel api 的, 不能由 vercel api 依赖 config
-        // 也就是说项目至少需要重新部署一次, load 才能正确运行(读到 token 和 projectId)
-        vercelToken: process.env.DAO_TOKEN,
-        vercelProjectName: process.env.DAO_PROJECT_NAME,
-      }).getEnvironments();
+      const configs = await new Vercel().getEnvironments();
 
       if (configs) {
         parsed = dotenv.parse(configs);
