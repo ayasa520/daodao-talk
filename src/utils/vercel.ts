@@ -31,17 +31,17 @@ export class Vercel {
       this.vercelProjectId = find1.value;
       this.vercelToken = find2.value;
     }
-    // const data = JSON.stringify(configs);
-    // const config = {
-    //   method: 'post',
-    //   url: `https://api.vercel.com/v8/projects/${this.vercelProjectId}/env`,
-    //   headers: {
-    //     Authorization: `Bearer ${this.vercelToken}`,
-    //     'Content-Type': 'application/json',
-    //   },
-    //   data,
-    // };
-    // await axios(config);
+    const data = JSON.stringify(configs);
+    const config = {
+      method: 'post',
+      url: `https://api.vercel.com/v8/projects/${this.vercelProjectId}/env`,
+      headers: {
+        Authorization: `Bearer ${this.vercelToken}`,
+        'Content-Type': 'application/json',
+      },
+      data,
+    };
+    await axios(config);
     await this.redeploy();
     return true;
   }
