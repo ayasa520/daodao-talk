@@ -1,4 +1,4 @@
-import { DocumentDefinition } from 'mongoose';
+import { FilterQuery } from 'mongoose';
 import { omit } from 'lodash';
 import { marked } from 'marked';
 
@@ -6,9 +6,7 @@ import PostModel, { Post } from '@/models/post.model';
 import logger from '@/utils/logger';
 
 export async function createPost(
-  input: DocumentDefinition<
-    Omit<Post, 'valid' | 'replies' | 'createdAt' | 'updatedAt'>
-  >
+  input: Omit<Post, 'valid' | 'replies' | 'createdAt' | 'updatedAt'>
 ) {
   const newPost = await PostModel.create({
     ...omit(input, 'content'),
@@ -38,9 +36,9 @@ export async function findAll() {
     .populate('user', ['_id', 'name', 'email', 'admin']);
 }
 
-export async function deletePost(query: Post) {
+export async function deletePost(query: FilterQuery<Post>) {
   // eslint-disable-next-line no-underscore-dangle
-  await PostModel.updateOne({ _id: query._id }, { valid: false });
+  await PostModel.updateOne(query, { valid: false });
   return PostModel.updateOne(
     { _id: query.rid },
     // eslint-disable-next-line no-underscore-dangle

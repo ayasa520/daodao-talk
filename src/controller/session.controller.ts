@@ -1,5 +1,4 @@
 /* eslint no-underscore-dangle: ["error", { "allow": ["_id"] }] */
-import dotenv from 'dotenv';
 import { Request, Response } from 'express';
 
 import { validatePassword } from '@/service/user.service';

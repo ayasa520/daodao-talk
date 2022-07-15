@@ -1,4 +1,6 @@
-import { boolean, object, string, TypeOf } from 'zod';
+import {
+  boolean, object, string, TypeOf
+} from 'zod';
 
 // 对 body 做格式上的检验, 检查字段是否齐全 看起来像 @Validated和@Valid 之类的
 export const createUserSchema = object({
@@ -18,7 +20,8 @@ export const createUserSchema = object({
     admin: boolean({
       required_error: 'Admin is required',
     }),
-  }).refine((data) => data.password === data.passwordConfirmation, {
+  }).refine((data) =>
+    data.password === data.passwordConfirmation, {
     message: 'Password do not match',
     path: ['passwordConfirmation'],
   }),

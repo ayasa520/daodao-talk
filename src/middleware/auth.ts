@@ -7,7 +7,7 @@ const config = Config.getConfig();
 
 /**
  * 对接口进行权限检查
- * @param allowConfig
+ * @param allowConfig 为空就是所有登录用户
  */
 export default function auth(
   allowConfig?: string | { commentConfig: string; posterConfig: string }
@@ -25,8 +25,11 @@ export default function auth(
       ? rid
         ? (config.get(allowConfig.commentConfig) as string | undefined)
         : (config.get(allowConfig.posterConfig) as string | undefined)
+      // eslint-disable-next-line no-nested-ternary
       : allowConfig
-        ? (config.get(allowConfig) as string | undefined)
+        ? allowConfig === 'all' || allowConfig === 'admin'
+          ? allowConfig
+          : (config.get(allowConfig) as string | undefined)
         : undefined;
     // 相当于不设置, 但是为了根据配置项动态管理, 所以统一起来
     if (allowRole === 'all') {

@@ -1,37 +1,42 @@
-import express, { Express } from 'express';
-import cookieParser from 'cookie-parser';
-import cors from 'cors';
+import express from 'express';
 
 // @ 为 src
-import connect from '@/utils/connect';
 import logger from '@/utils/logger';
 import routes from '@/routes';
 import { Config } from '@/config/config';
+import { getCookieParser } from '@/middleware/cookieParser';
+import { getCors } from '@/middleware/cors';
 
 logger.info('app');
 const config = Config.getConfig();
-const app: Express = express();
 
-// 连接数据库
-connect()
-  .then(() => {
-    logger.info(`Connect to ${config.get('DB_CONN_STRING')}`);
-  })
-  .catch((err) => logger.error(err));
+class App {
+  public express: express.Application = express();
 
-app.use(express.urlencoded({ extended: false }));
-app.use(express.json());
-app.use(cookieParser(process.env.COOKIE_SECRET as string));
-// app.use(cors({ origin: process.env.ALLOW_DOMAIN as string }));
-app.use(cors({ origin: config.get('ALLOW_DOMAIN') as string }));
+  public constructor() {
+    this.express.use(express.urlencoded({ extended: false }));
+    this.express.use(express.json());
+    // app.use(cors({ origin: process.env.ALLOW_DOMAIN as string }));
 
-app.use(routes);
+    // 必须在 route 之上
+    this.express.use(getCors('ALLOW_DOMAIN'));
+    this.express.use(getCookieParser('COOKIE_SECRET'));
 
-// const { PORT = 5000 } = process.env;
-const PORT = config.get('PORT');
+    this.express.use(routes);
 
-app.listen(PORT, async () => {
-  logger.info(`Server started at http://localhost:${PORT}`);
-});
+    // const { PORT = 5000 } = process.env;
+    const PORT = config.get('PORT') || 5000;
 
-export default app;
+    // cookieParser 中间件读取的 secret 随着配置变化而变化
+    // this.express.use(getCookieParser('COOKIE_SECRET'));
+
+    // PORT 读取新配置只能重启了
+    this.express.listen(PORT, async () => {
+      logger.info(`Server started at http://localhost:${PORT}`);
+    });
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+}
+
+export default new App().express;

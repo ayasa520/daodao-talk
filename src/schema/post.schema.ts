@@ -1,7 +1,6 @@
 import { object, string, TypeOf } from 'zod';
 import { isValidObjectId } from 'mongoose';
 
-
 // 给 validate 用的
 export const createPostSchema = object({
   body: object({
@@ -25,3 +24,4 @@ export const deletePostSchema = object({
   }),
 });
 export type CreatePostInput = TypeOf<typeof createPostSchema>;
+export type DeletePostInput = TypeOf<typeof deletePostSchema>;

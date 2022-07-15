@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 
-import { CreatePostInput } from '@/schema/post.schema';
+import { CreatePostInput, DeletePostInput } from '@/schema/post.schema';
 import {
   createPost,
   deletePost,
@@ -27,20 +27,25 @@ export async function getPostsHandler(req: Request, res: Response) {
   res.send(result);
 }
 
-export async function deletePostsHandler(req: Request, res: Response) {
+export async function deletePostsHandler(
+  req: Request<DeletePostInput['params']>,
+  res: Response
+) {
   const userId = res.locals.user.uid;
   const postId = req.params.postId as string;
+
+  const isAdmin = res.locals.user.admin;
 
   const query = await findPost(postId);
 
   if (!query || !query.valid) {
     return res.status(404).send(`Post with id ${postId} does not exist`);
   }
-  if (query.uid.toString() !== userId) {
+  if (!isAdmin && query.uid.toString() !== userId) {
     return res.status(403);
   }
 
-  const result = await deletePost(query as Post);
+  const result = await deletePost(query);
 
   return res.send(result);
 }

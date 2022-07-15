@@ -12,8 +12,10 @@ import { Config } from '@/config/config';
 logger.info('session');
 const config = Config.getConfig();
 export async function createSession(userId: string, userAgent: string) {
-  const session = await SessionModel.create({ user: userId, userAgent });
-  return session.toJSON();
+  return SessionModel.create({
+    user: userId,
+    userAgent,
+  });
 }
 
 export async function findSessions(query: FilterQuery<Session>) {

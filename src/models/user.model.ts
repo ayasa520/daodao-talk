@@ -8,7 +8,7 @@ export interface User {
   name: string;
   password: string;
   createdAt: Date;
-  updateAt: Date;
+  updatedAt: Date;
   admin: boolean;
 }
 

@@ -16,7 +16,7 @@ export interface Post {
   content: string;
   userAgent: string;
   createdAt: Date;
-  updateAt: Date;
+  updatedAt: Date;
 }
 
 const PostSchema = new mongoose.Schema<Post>(
