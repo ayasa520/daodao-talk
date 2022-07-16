@@ -23,11 +23,10 @@ const routes = Router();
 
 routes.use(deserializeUser);
 
-routes.get('/', (req: Request, res: Response) => {
+routes.get('/', async (req: Request, res: Response) => {
   if (config.check()) {
     return res.send('配置已完成');
   }
-
   return res.status(500).send('尚有配置未完成');
 });
 

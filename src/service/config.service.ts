@@ -18,8 +18,6 @@ export async function createConfig(input: ConfigType) {
       configString += `${key}=${inputElement}\n`;
     });
     fs.writeFileSync(envPath, configString);
-    // 重新读取配置项
-    await config.load();
   } else {
     // 调用 vercel api 创建环境变量
     const configs: {
@@ -40,4 +38,6 @@ export async function createConfig(input: ConfigType) {
 
     await new Vercel().setEnvironments(configs);
   }
+  // 重新读取配置项
+  await config.load();
 }

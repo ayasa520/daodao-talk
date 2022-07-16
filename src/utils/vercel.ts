@@ -96,17 +96,12 @@ export class Vercel {
       },
       data: '',
     };
-    try {
-      const response = await axios(config);
-      let result = '';
-      response.data.envs.forEach((element: { key: string; value: string }) => {
-        result += `${element.key}=${element.value}\n`;
-      });
-      logger.info('从 vercel 取回配置');
-      return result;
-    } catch (e) {
-      logger.error(e);
-    }
-    return null;
+    const response = await axios(config);
+    let result = '';
+    response.data.envs.forEach((element: { key: string; value: string }) => {
+      result += `${element.key}=${element.value}\n`;
+    });
+    logger.info('从 vercel 取回配置');
+    return result;
   }
 }

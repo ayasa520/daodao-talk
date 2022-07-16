@@ -3,7 +3,6 @@ import { omit } from 'lodash';
 import { marked } from 'marked';
 
 import PostModel, { Post } from '@/models/post.model';
-import logger from '@/utils/logger';
 
 export async function createPost(
   input: Omit<Post, 'valid' | 'replies' | 'createdAt' | 'updatedAt'>
@@ -24,7 +23,6 @@ export async function findPost(postId: string) {
 }
 export async function findAll() {
   const query = await PostModel.find({});
-  logger.info(query);
   return PostModel.find({ rid: { $exists: false }, valid: true })
     .populate({
       path: 'replies',

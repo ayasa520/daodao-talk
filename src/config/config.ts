@@ -10,6 +10,8 @@ import { Vercel } from '@/utils/vercel';
 export class Config {
   private static instance: Config;
 
+  private vercel = new Vercel();
+
   // 这个存储着实际的配置项, 但是是在内存里, 对它的修改不是稳妥的. 采用修改 .enva 然后让这个重新读取
   // 如果是部署在 severless 上, 由于无状态, 环境变量始终读的是最新的, 所以只更改环境变量就能改变 auth
   // 中间件, 也不需要 override. 而如果部署在服务器, 好像只能重启
@@ -19,6 +21,7 @@ export class Config {
   >();
 
   private constructor() {
+    logger.info('构造');
     this.load().then(() => {
       logger.info('启动');
     });
@@ -50,7 +53,7 @@ export class Config {
       // 更改配置是变快了, 但是如果很少更改的话, 可能比直接读 process.env 的体验要差
       // 不过我看其他几个项目有用外置数据库存储配置的, 那样可能更慢
       logger.info('vercel 环境');
-      const configs = await new Vercel().getEnvironments();
+      const configs = await this.vercel.getEnvironments();
 
       if (configs) {
         parsed = dotenv.parse(configs);
@@ -82,11 +85,6 @@ export class Config {
   }
 
   public async connect() {
-    try {
-      await mongoose.disconnect();
-    } catch (e) {
-      logger.error(e);
-    }
     const dbUri = this.configMap.get('DB_CONN_STRING') as string;
     // 或者
     // return mongoose
@@ -104,14 +102,15 @@ export class Config {
 
   public check() {
     // 检查运行必须的配置. 后两项是vercel初始化之前就确定的
+    logger.info('check');
     return (
-      this.configMap.get('DB_CONN_STRING')
-      && this.configMap.get('ALLOW_DOMAIN')
-      && this.configMap.get('SECRET')
-      && this.configMap.get('COOKIE_SECRET')
-      && (process.env.DAO_TOKEN
-        ? this.configMap.get('DAO_PROJECT_NAME')
-          && this.configMap.get('DAO_TOKEN')
+      this.configMap.get('DB_CONN_STRING') &&
+      this.configMap.get('ALLOW_DOMAIN') &&
+      this.configMap.get('SECRET') &&
+      this.configMap.get('COOKIE_SECRET') &&
+      (process.env.DAO_TOKEN
+        ? this.configMap.get('DAO_PROJECT_NAME') &&
+          this.configMap.get('DAO_TOKEN')
         : true)
     );
   }
