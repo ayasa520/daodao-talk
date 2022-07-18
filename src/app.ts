@@ -1,46 +1,44 @@
+import 'reflect-metadata';
 import express from 'express';
+import { InversifyExpressServer } from 'inversify-express-utils';
 
-// @ 为 src
+import { CookieParserMiddleware } from '@/middleware/cookieParser';
+import CONFIGS from '@/constants/CONFIGS';
+import { CorsMiddleware } from '@/middleware/cors';
 import logger from '@/utils/logger';
-import routes from '@/routes';
-import { Config } from '@/config/config';
-import { getCookieParser } from '@/middleware/cookieParser';
-import { getCors } from '@/middleware/cors';
-import { vercelLoadMiddleware } from '@/middleware/vercelLoadConfig';
+import TYPES from '@/constants/TYPES';
+import { DeserializeUser } from '@/middleware/deserializeUser';
+import { container } from '@/inversify.config';
+import { VercelMiddleware } from '@/middleware/vercelLoadConfig';
 
-logger.info('app');
-const config = Config.getConfig();
+const server = new InversifyExpressServer(container);
 
-class App {
-  public express: express.Application = express();
+server.setConfig(
+  // 用闭包比 inversifyJs 的工厂少写很多代码, 虽然不知道是否"优雅", 管他呢
+  (app) => {
+    const vercelMiddleware = container.get<VercelMiddleware>(
+      TYPES.ReloadEveryReq
+    );
+    app.use(vercelMiddleware.handler.bind(vercelMiddleware));
+    app.use(express.urlencoded({ extended: false }));
+    app.use(express.json());
 
-  public constructor() {
-    // eslint-disable-next-line max-len
-    // 我不太了解 serverless, 它必须每次都要手动加载配置(调用 config.load() )才行, 我原以为用到 config 的地方意味着 config 必然会经过实例化, 那么 load 一定已经调用过了, 事实并非如此
-    this.express.use(vercelLoadMiddleware);
-    this.express.use(express.urlencoded({ extended: false }));
-    this.express.use(express.json());
-    // app.use(cors({ origin: process.env.ALLOW_DOMAIN as string }));
-
-    // 必须在 route 之上
-    this.express.use(getCors('ALLOW_DOMAIN'));
-    this.express.use(getCookieParser('COOKIE_SECRET'));
-
-    this.express.use(routes);
-
-    // const { PORT = 5000 } = process.env;
-    const PORT = config.get('PORT') || 5000;
-
-    // cookieParser 中间件读取的 secret 随着配置变化而变化
-    // this.express.use(getCookieParser('COOKIE_SECRET'));
-
-    // PORT 读取新配置只能重启了
-    this.express.listen(PORT, async () => {
-      logger.info(`Server started at http://localhost:${PORT}`);
-    });
+    const cookieParserMiddleware = container.get<CookieParserMiddleware>(
+      CONFIGS.COOKIE_SECRET
+    );
+    const corsMiddleware = container.get<CorsMiddleware>(CONFIGS.ALLOW_DOMAIN);
+    const deserializeUser = container.get<DeserializeUser>(
+      TYPES.DeserializeUser
+    );
+    app.use(cookieParserMiddleware.handler.bind(cookieParserMiddleware));
+    app.use(corsMiddleware.handler.bind(corsMiddleware));
+    app.use(deserializeUser.handler.bind(deserializeUser));
   }
+);
 
-  // eslint-disable-next-line class-methods-use-this
-}
+const app = server.build();
+app.listen(5000, () => {
+  logger.info('服务器启动');
+});
 
-export default new App().express;
+export default app;

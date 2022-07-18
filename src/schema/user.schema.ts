@@ -25,7 +25,7 @@ export const createUserSchema = object({
     message: 'Password do not match',
     path: ['passwordConfirmation'],
   }),
-});
+}).describe('createUserSchema');
 
 // Omit 无法直接处理嵌套的类型
 type ChangeFields<T, R> = Omit<T, keyof R> & R;

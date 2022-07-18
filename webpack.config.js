@@ -5,7 +5,7 @@ module.exports = {
   entry: './src/app.ts',
   target: 'node',
   externals: [nodeExternals()],
-  mode: 'production',
+  mode: 'development',
   module: {
     rules: [
       {

@@ -1,7 +1,9 @@
 import axios from 'axios';
+import { injectable } from 'inversify';
 
 import logger from '@/utils/logger';
 
+@injectable()
 export class Vercel {
   private vercelToken: string;
 

@@ -1,9 +1,6 @@
 import mongoose from 'mongoose';
-import dotenv from 'dotenv';
 
 import { User } from '@/models/user.model';
-
-dotenv.config();
 
 // 模仿 twikoo
 export interface Post {
@@ -18,34 +15,3 @@ export interface Post {
   createdAt: Date;
   updatedAt: Date;
 }
-
-const PostSchema = new mongoose.Schema<Post>(
-  {
-    uid: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-    content: { type: String, required: true },
-    userAgent: { type: String, required: true },
-    replies: {
-      type: [mongoose.Schema.Types.ObjectId],
-      required: true,
-      ref: 'Post',
-    },
-    rid: { type: mongoose.Schema.Types.ObjectId, ref: 'Post' },
-    pid: { type: mongoose.Schema.Types.ObjectId, ref: 'Post' },
-    valid: { type: Boolean, default: true },
-  },
-  {
-    timestamps: true,
-    // 会多一个 id 字段
-    toJSON: { virtuals: true },
-  }
-);
-PostSchema.virtual('user', {
-  ref: 'User',
-  localField: 'uid',
-  foreignField: '_id',
-  justOne: true,
-});
-
-const PostModel = mongoose.model<Post>('Post', PostSchema);
-
-export default PostModel;

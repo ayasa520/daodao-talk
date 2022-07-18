@@ -13,6 +13,7 @@ export const createConfigSchema = object({
     POST_COMMENT_ALLOW: string(),
     GET_COMMENT_ALLOW: string(),
     DELETE_COMMENT_ALLOW: string(),
-  })
-});
+  }),
+}).describe('createConfigSchema');
+
 export type CreateConfigInput = TypeOf<typeof createConfigSchema>;

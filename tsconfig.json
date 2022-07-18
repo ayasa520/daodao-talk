@@ -2,7 +2,7 @@
   "compilerOptions": {
     "module": "commonjs",
     "moduleResolution": "node",
-    "declaration": false,
+    "declaration": true,
     "removeComments": true,
     "allowJs": true,
     "strict": true,

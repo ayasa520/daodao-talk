@@ -10,7 +10,7 @@ export const createPostSchema = object({
     rid: string().optional(),
     pid: string().optional(),
   }),
-});
+}).describe('createPostSchema');
 
 export const deletePostSchema = object({
   params: object({
@@ -22,6 +22,6 @@ export const deletePostSchema = object({
     message: 'postId is not a valid ObjectId',
     path: ['postId'],
   }),
-});
+}).describe('deletePostSchema');
 export type CreatePostInput = TypeOf<typeof createPostSchema>;
 export type DeletePostInput = TypeOf<typeof deletePostSchema>;

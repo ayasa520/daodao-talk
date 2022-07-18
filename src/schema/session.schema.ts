@@ -9,4 +9,4 @@ export const createSessionSchema = object({
       required_error: 'Password is required',
     }),
   }),
-});
+}).describe('createSessionSchema');

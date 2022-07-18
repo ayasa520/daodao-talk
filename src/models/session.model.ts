@@ -12,20 +12,3 @@ export interface Session {
   createdAt: Date;
   updateAt: Date;
 }
-
-// 2. Create a Schema corresponding to the document interface.
-const sessionSchema = new mongoose.Schema<Session>(
-  {
-    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-    valid: { type: Boolean, default: true },
-    userAgent: { type: String },
-  },
-  {
-    timestamps: true,
-  }
-);
-
-// 3. Create a Model.
-const SessionModel = mongoose.model<Session>('Session', sessionSchema);
-
-export default SessionModel;

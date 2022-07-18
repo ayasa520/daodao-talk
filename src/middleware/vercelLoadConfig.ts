@@ -1,20 +1,25 @@
-import { NextFunction, Request, Response } from 'express';
+import express from 'express';
+import { BaseMiddleware } from 'inversify-express-utils';
+import { injectable } from 'inversify';
 
 import { Config } from '@/config/config';
+import logger from '@/utils/logger';
 
-/**
- * vercel 环境下每次调用, 以通过 vercel api 获取最新环境变量
- * @param req
- * @param res
- * @param next
- */
-export const vercelLoadMiddleware = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  if (process.env.DAO_TOKEN && process.env.DAO_PROJECT_NAME) {
-    await Config.getConfig().load();
+@injectable()
+export class VercelMiddleware extends BaseMiddleware {
+  public constructor(private configurer: Config) {
+    super();
   }
-  return next();
-};
+
+  public async handler(
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ): Promise<void> {
+    if (process.env.DAO_TOKEN && process.env.DAO_PROJECT_NAME) {
+      logger.info('每次load');
+      await this.configurer.load();
+    }
+    return next();
+  }
+}
