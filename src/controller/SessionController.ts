@@ -12,14 +12,14 @@ import {
 import { inject } from 'inversify';
 
 import logger from '@/utils/logger';
-import { Config } from '@/config/config';
+import { Config } from '@/config/Config';
 import { SessionService } from '@/service/SessionService';
 import TYPES from '@/constants/TYPES';
 import { validateSchemaSym as validateSchema } from '@/middleware/validate';
 import SCHEMAS from '@/constants/SCHEMAS';
 import { UserService } from '@/service/UserService';
-import { auth } from '@/middleware/auth';
-import { JwtUtils } from '@/utils/jwt.utils';
+import { authMiddleware } from '@/middleware/AuthMiddleware';
+import { JwtUtils } from '@/utils/JwtUtils';
 
 @controller('/api/sessions')
 export class SessionController implements Controller {
@@ -86,7 +86,7 @@ export class SessionController implements Controller {
     return res.sendStatus(200);
   }
 
-  @httpGet('/', auth())
+  @httpGet('/', authMiddleware())
   public async getSessionHandler(
     @request() req: Request,
     @response() res: Response
@@ -102,7 +102,7 @@ export class SessionController implements Controller {
     return res.send(sessions);
   }
 
-  @httpDelete('/', auth())
+  @httpDelete('/', authMiddleware())
   public async deleteSessionHandler(
     @request() req: Request,
     @response() res: Response

@@ -1,16 +1,16 @@
 import { inject, injectable } from 'inversify';
 import dotenv from 'dotenv';
 
-import { Vercel } from '@/utils/vercel';
+import { VercelAPI } from '@/utils/VercelAPI';
 import TYPES from '@/constants/TYPES';
 import logger from '@/utils/logger';
-import { Config } from '@/config/config';
-import { DataBaseConnection } from '@/utils/database';
+import { Config } from '@/config/Config';
+import { DataBaseConnection } from '@/utils/DataBaseConnection';
 
 @injectable()
 export class VercelConfigurer extends Config {
   public constructor(
-    @inject(TYPES.Vercel) private vercel: Vercel,
+    @inject(TYPES.Vercel) private vercel: VercelAPI,
     @inject(TYPES.DbClient) protected dBClient: DataBaseConnection
   ) {
     super();

@@ -6,22 +6,22 @@ import {
   UserRepository as UserRepositoryInterface,
   PostRepository as PostRepositoryInterface,
   SessionRepository as SessionRepositoryInterface,
-} from '@/dao/repositories';
-import { auth, AuthMiddleware } from '@/middleware/auth';
+} from '@/dao/Repositories';
+import { authMiddleware, AuthMiddleware } from '@/middleware/AuthMiddleware';
 import validate, { validateSchemaSym } from '@/middleware/validate';
-import { createConfigSchema } from '@/schema/config.shema';
-import { createPostSchema, deletePostSchema } from '@/schema/post.schema';
-import { createSessionSchema } from '@/schema/session.schema';
-import { createUserSchema } from '@/schema/user.schema';
+import { createConfigSchema } from '@/schema/ConfigShema';
+import { createPostSchema, deletePostSchema } from '@/schema/PostSchema';
+import { createSessionSchema } from '@/schema/SessionSchema';
+import { createUserSchema } from '@/schema/UserSchema';
 import CONFIGS from '@/constants/CONFIGS';
-import { Config } from '@/config/config';
+import { Config } from '@/config/Config';
 import TYPES from '@/constants/TYPES';
 import { VercelConfigurer } from '@/config/VercelConfigurer';
 import { ServerConfigurer } from '@/config/SeverConfigurer';
-import { Vercel } from '@/utils/vercel';
-import { CookieParserMiddleware } from '@/middleware/cookieParser';
-import { CorsMiddleware } from '@/middleware/cors';
-import { DataBaseConnection, MongoDBConnection } from '@/utils/database';
+import { VercelAPI } from '@/utils/VercelAPI';
+import { CookieParserMiddleware } from '@/middleware/CookieParserMiddleware';
+import { CorsMiddleware } from '@/middleware/CorsMiddleware';
+import { DataBaseConnection, MongoDBConnection } from '@/utils/DataBaseConnection';
 import { UserRepository } from '@/dao/impl/mongoose/impl/UserRepository';
 import { SessionRepository } from '@/dao/impl/mongoose/impl/SessionRepository';
 import { PostRepository } from '@/dao/impl/mongoose/impl/PostRepository';
@@ -29,18 +29,18 @@ import { ConfigService as ConfigServiceInterface } from '@/service/ConfigService
 import { SessionService as SessionServiceInterface } from '@/service/SessionService';
 import { UserService as UserServiceInterface } from '@/service/UserService';
 import { PostService as PostServiceInterface } from '@/service/PostService';
-import { ConfigService } from '@/service/impl/config.service';
-import { SessionService } from '@/service/impl/session.service';
-import { UserService } from '@/service/impl/user.service';
-import { DeserializeUser } from '@/middleware/deserializeUser';
-import { JwtUtils } from '@/utils/jwt.utils';
-import { ConfigController } from '@/controller/config.controller';
-import { UserController } from '@/controller/user.controller';
-import { PostController } from '@/controller/post.controller';
-import { SessionController } from '@/controller/session.controller';
-import { PostService } from '@/service/impl/post.service';
+import { ConfigService } from '@/service/impl/ConfigService';
+import { SessionService } from '@/service/impl/SessionService';
+import { UserService } from '@/service/impl/UserService';
+import { DeserializeUser } from '@/middleware/DeserializeUser';
+import { JwtUtils } from '@/utils/JwtUtils';
+import { ConfigController } from '@/controller/ConfigController';
+import { UserController } from '@/controller/UserController';
+import { PostController } from '@/controller/PostController';
+import { SessionController } from '@/controller/SessionController';
+import { PostService } from '@/service/impl/PostService';
 import { registerController } from '@/utils/registerController';
-import { VercelMiddleware } from '@/middleware/vercelLoadConfig';
+import { VercelMiddleware } from '@/middleware/VercelMiddleware';
 
 // 这真的值得吗? 我不知道. 我只是想在 controller 里面注入中间件, 但是不想用 container 传入 controller
 
@@ -55,7 +55,7 @@ export const bindings = new ContainerModule((bind) => {
     bind<Config>(TYPES.Configurer).to(ServerConfigurer).inSingletonScope();
   }
 
-  bind<Vercel>(TYPES.Vercel).to(Vercel).inSingletonScope();
+  bind<VercelAPI>(TYPES.Vercel).to(VercelAPI).inSingletonScope();
   bind<DataBaseConnection>(TYPES.DbClient)
     .to(MongoDBConnection)
     .inSingletonScope();
@@ -68,13 +68,12 @@ export const bindings = new ContainerModule((bind) => {
     CONFIGS.user,
   ].forEach((conf) => {
     bind<BaseMiddleware>(conf)
-      .toDynamicValue((context) => {
+      .toDynamicValue((context) =>
         // logger.info(context.container.get<Config>(TYPES.Configurer).check());
-        return new AuthMiddleware(
+        new AuthMiddleware(
           context.container.get<Config>(TYPES.Configurer),
           conf
-        );
-      })
+        ))
       .inRequestScope();
   });
 
@@ -83,7 +82,7 @@ export const bindings = new ContainerModule((bind) => {
       new VercelMiddleware(context.container.get<Config>(TYPES.Configurer))
   );
   bind<BaseMiddleware>(
-    auth({
+    authMiddleware({
       commentConfig: CONFIGS.POST_COMMENT_ALLOW,
       posterConfig: CONFIGS.POST_POSTER_ALLOW,
     })
@@ -123,8 +122,7 @@ export const bindings = new ContainerModule((bind) => {
     createUserSchema,
   ].forEach((schema) => {
     bind<express.RequestHandler>(validateSchemaSym(schema)).toDynamicValue(() =>
-      validate(schema)
-    );
+      validate(schema));
   });
 
   bind<UserRepositoryInterface>(TYPES.UserRepository)

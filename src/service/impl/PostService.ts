@@ -4,8 +4,8 @@ import { marked } from 'marked';
 import { inject, injectable } from 'inversify';
 
 import TYPES from '@/constants/TYPES';
-import { PostRepository } from '@/dao/repositories';
-import { Post } from '@/models/post.model';
+import { PostRepository } from '@/dao/Repositories';
+import { Post } from '@/models/Post';
 import { PostService as PostServiceInterface } from '@/service/PostService';
 
 @injectable()

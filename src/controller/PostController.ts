@@ -11,11 +11,11 @@ import {
 } from 'inversify-express-utils';
 import { inject } from 'inversify';
 
-import { CreatePostInput } from '@/schema/post.schema';
-import { Post } from '@/models/post.model';
+import { CreatePostInput } from '@/schema/PostSchema';
+import { Post } from '@/models/Post';
 import { validateSchemaSym as validateSchema } from '@/middleware/validate';
 import SCHEMAS from '@/constants/SCHEMAS';
-import { auth } from '@/middleware/auth';
+import { authMiddleware } from '@/middleware/AuthMiddleware';
 import CONFIGS from '@/constants/CONFIGS';
 import TYPES from '@/constants/TYPES';
 import { PostService } from '@/service/PostService';
@@ -31,7 +31,7 @@ export class PostController implements Controller {
   @httpPost(
     '/',
     validateSchema(SCHEMAS.createPostSchema),
-    auth({
+    authMiddleware({
       posterConfig: CONFIGS.POST_POSTER_ALLOW,
       commentConfig: CONFIGS.POST_COMMENT_ALLOW,
     })
@@ -54,7 +54,7 @@ export class PostController implements Controller {
     return res.send(result);
   }
 
-  @httpGet('/', auth(CONFIGS.GET_COMMENT_ALLOW))
+  @httpGet('/', authMiddleware(CONFIGS.GET_COMMENT_ALLOW))
   public async getPostsHandler(
     @request() req: Request,
     @response() res: Response
@@ -66,7 +66,7 @@ export class PostController implements Controller {
   @httpDelete(
     '/:postId',
     validateSchema(SCHEMAS.deletePostSchema),
-    auth(CONFIGS.DELETE_COMMENT_ALLOW)
+    authMiddleware(CONFIGS.DELETE_COMMENT_ALLOW)
   )
   public async deletePostsHandler(
     @requestParam('postId') postId: string,

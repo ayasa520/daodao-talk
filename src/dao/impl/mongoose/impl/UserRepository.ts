@@ -2,9 +2,9 @@ import { injectable } from 'inversify';
 import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
 
-import { GenericRepository } from '@/dao/impl/mongoose/repository';
-import { User } from '@/models/user.model';
-import { UserRepository as UserRepositoryInterface } from '@/dao/repositories';
+import { GenericRepository } from '@/dao/impl/mongoose/GenericRepository';
+import { User } from '@/models/User';
+import { UserRepository as UserRepositoryInterface } from '@/dao/Repositories';
 
 @injectable()
 export class UserRepository

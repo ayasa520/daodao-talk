@@ -2,10 +2,10 @@ import express from 'express';
 import _cors from 'cors';
 import { BaseMiddleware } from 'inversify-express-utils';
 
-import { Config } from '@/config/config';
+import { Config } from '@/config/Config';
 import logger from '@/utils/logger';
 
-export function cors(originConfigKey: symbol): symbol {
+export function corsMiddleware(originConfigKey: symbol): symbol {
   return originConfigKey;
 }
 
@@ -22,7 +22,6 @@ export class CorsMiddleware extends BaseMiddleware {
     res: express.Response,
     next: express.NextFunction
   ): void {
-    // options?: cors.CorsOptions | cors.CorsOptionsDelegate<cors.CorsRequest>
     const domain = this.configurer.get(
       this.originConfigKey.description as string
     );

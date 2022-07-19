@@ -2,9 +2,9 @@ import express from 'express';
 import { BaseMiddleware } from 'inversify-express-utils';
 import { injectable } from 'inversify';
 
-import { Post } from '@/models/post.model';
+import { Post } from '@/models/Post';
 import CONFIGS from '@/constants/CONFIGS';
-import { Config } from '@/config/config';
+import { Config } from '@/config/Config';
 import logger from '@/utils/logger';
 
 // const config = Config.getConfig();
@@ -43,8 +43,8 @@ export class AuthMiddleware extends BaseMiddleware {
         : (this.configurer.get(
               this.allowConfig.posterConfig.description as string
         ) as string | undefined)
-      : // eslint-disable-next-line no-nested-ternary
-      this.allowConfig
+      // eslint-disable-next-line no-nested-ternary
+      : this.allowConfig
         ? this.allowConfig.description === 'all'
           || this.allowConfig.description === 'admin'
           ? this.allowConfig.description
@@ -82,7 +82,7 @@ export class AuthMiddleware extends BaseMiddleware {
  * 不直接返回中间件, 二十返回一个 symbol, 实际上没有也可以, 只是为了中间件更加醒目
  * @param allowConfig
  */
-export function auth(
+export function authMiddleware(
   allowConfig?: symbol | { commentConfig: symbol; posterConfig: symbol }
 ) {
   if (allowConfig) {

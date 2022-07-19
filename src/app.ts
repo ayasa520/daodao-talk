@@ -2,14 +2,14 @@ import 'reflect-metadata';
 import express from 'express';
 import { InversifyExpressServer } from 'inversify-express-utils';
 
-import { CookieParserMiddleware } from '@/middleware/cookieParser';
+import { CookieParserMiddleware } from '@/middleware/CookieParserMiddleware';
 import CONFIGS from '@/constants/CONFIGS';
-import { CorsMiddleware } from '@/middleware/cors';
+import { CorsMiddleware } from '@/middleware/CorsMiddleware';
 import logger from '@/utils/logger';
 import TYPES from '@/constants/TYPES';
-import { DeserializeUser } from '@/middleware/deserializeUser';
+import { DeserializeUser } from '@/middleware/DeserializeUser';
 import { container } from '@/inversify.config';
-import { VercelMiddleware } from '@/middleware/vercelLoadConfig';
+import { VercelMiddleware } from '@/middleware/VercelMiddleware';
 
 const server = new InversifyExpressServer(container);
 

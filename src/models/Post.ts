@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-import { User } from '@/models/user.model';
+import { User } from '@/models/User';
 
 // 模仿 twikoo
 export interface Post {

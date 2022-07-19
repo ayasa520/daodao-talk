@@ -1,8 +1,6 @@
-import { inject, injectable } from 'inversify';
+import { injectable } from 'inversify';
 
 import logger from '@/utils/logger';
-import TYPES from '@/constants/TYPES';
-import { DataBaseConnection } from '@/utils/database';
 
 @injectable()
 export abstract class Config {
@@ -11,18 +9,17 @@ export abstract class Config {
     string | undefined
   >();
 
-
   public check(): boolean {
     // 检查运行必须的配置. 后两项是vercel初始化之前就确定的
     logger.info('check');
     return (
-      this.configMap.has('DB_CONN_STRING') &&
-      this.configMap.has('ALLOW_DOMAIN') &&
-      this.configMap.has('SECRET') &&
-      this.configMap.has('COOKIE_SECRET') &&
-      (process.env.DAO_TOKEN
-        ? this.configMap.has('DAO_PROJECT_NAME') &&
-          this.configMap.has('DAO_TOKEN')
+      this.configMap.has('DB_CONN_STRING')
+      && this.configMap.has('ALLOW_DOMAIN')
+      && this.configMap.has('SECRET')
+      && this.configMap.has('COOKIE_SECRET')
+      && (process.env.DAO_TOKEN
+        ? this.configMap.has('DAO_PROJECT_NAME')
+          && this.configMap.has('DAO_TOKEN')
         : true)
     );
   }

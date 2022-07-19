@@ -5,9 +5,9 @@ import {
   UpdateWithAggregationPipeline,
 } from 'mongoose';
 
-import { Post } from '@/models/post.model';
-import { Session } from '@/models/session.model';
-import { User } from '@/models/user.model';
+import { Post } from '@/models/Post';
+import { Session } from '@/models/Session';
+import { User } from '@/models/User';
 
 export type Query<T> = {
   [P in keyof T]?: T[P] | { $regex: RegExp };

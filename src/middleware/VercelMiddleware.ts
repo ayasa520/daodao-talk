@@ -2,7 +2,7 @@ import express from 'express';
 import { BaseMiddleware } from 'inversify-express-utils';
 import { injectable } from 'inversify';
 
-import { Config } from '@/config/config';
+import { Config } from '@/config/Config';
 import logger from '@/utils/logger';
 
 @injectable()

@@ -3,14 +3,14 @@ import { FilterQuery, UpdateQuery } from 'mongoose';
 import { get } from 'lodash';
 import { inject, injectable } from 'inversify';
 
-import { User } from '@/models/user.model';
+import { User } from '@/models/User';
 import logger from '@/utils/logger';
 import TYPES from '@/constants/TYPES';
-import { SessionRepository, UserRepository } from '@/dao/repositories';
+import { SessionRepository, UserRepository } from '@/dao/Repositories';
 import { SessionService as SessionServiceInterface } from '@/service/SessionService';
-import { Session } from '@/models/session.model';
-import { Config } from '@/config/config';
-import { JwtUtils } from '@/utils/jwt.utils';
+import { Session } from '@/models/Session';
+import { Config } from '@/config/Config';
+import { JwtUtils } from '@/utils/JwtUtils';
 
 @injectable()
 export class SessionService implements SessionServiceInterface {

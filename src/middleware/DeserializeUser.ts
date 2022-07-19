@@ -5,9 +5,9 @@ import { BaseMiddleware } from 'inversify-express-utils';
 
 import logger from '@/utils/logger';
 import TYPES from '@/constants/TYPES';
-import { Config } from '@/config/config';
+import { Config } from '@/config/Config';
 import { SessionService } from '@/service/SessionService';
-import { JwtUtils } from '@/utils/jwt.utils';
+import { JwtUtils } from '@/utils/JwtUtils';
 
 // 从 token 中解码出用户信息
 @injectable()

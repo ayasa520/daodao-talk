@@ -5,7 +5,7 @@ import mongoose, {
   UpdateWithAggregationPipeline,
 } from 'mongoose';
 
-import { Query, Repository, UpdateResult } from '@/dao/repositories';
+import { Query, Repository, UpdateResult } from '@/dao/Repositories';
 
 /**
  * 包装 mongoose 的目的只有一个: 将 service 与数据库操作解耦, 之后换其他的驱动或者腾讯云开发数据库都能容易地扩展
@@ -19,7 +19,7 @@ export class GenericRepository<TEntity> implements Repository<TEntity> {
     return this.Model.findOne(query);
   }
 
-  // We wrap the mongoose API here so we can use async / await
+  // We wrap the mongoose API here, so we can use async / await
   public async findAll(): Promise<TEntity[] | PopulatedDoc<TEntity>> {
     return this.Model.find({});
   }

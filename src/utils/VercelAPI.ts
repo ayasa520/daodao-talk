@@ -4,10 +4,10 @@ import { injectable } from 'inversify';
 import logger from '@/utils/logger';
 
 @injectable()
-export class Vercel {
-  private vercelToken: string;
+export class VercelAPI {
+  private readonly vercelToken: string;
 
-  private vercelProjectName: string;
+  private readonly vercelProjectName: string;
 
   public constructor() {
     this.vercelToken = process.env.DAO_TOKEN || '';

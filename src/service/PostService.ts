@@ -1,7 +1,7 @@
-import { FilterQuery } from 'mongoose';
+import { FilterQuery, PopulatedDoc } from 'mongoose';
 
-import { Post } from '@/models/post.model';
-import { UpdateResult } from '@/dao/repositories';
+import { Post } from '@/models/Post';
+import { UpdateResult } from '@/dao/Repositories';
 
 export interface PostService {
   createPost(
@@ -10,7 +10,7 @@ export interface PostService {
 
   findPost(postId: string): Promise<Post | null>;
 
-  findAll(): Promise<any>;
+  findAll(): Promise<Post[] | PopulatedDoc<Post>>;
 
   deletePost(query: FilterQuery<Post>): Promise<UpdateResult>;
 }

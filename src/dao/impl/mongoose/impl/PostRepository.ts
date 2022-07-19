@@ -1,9 +1,9 @@
 import { injectable } from 'inversify';
 import mongoose, { PopulatedDoc } from 'mongoose';
 
-import { GenericRepository } from '@/dao/impl/mongoose/repository';
-import { Post } from '@/models/post.model';
-import { PostRepository as PostRepositoryInterface } from '@/dao/repositories';
+import { GenericRepository } from '@/dao/impl/mongoose/GenericRepository';
+import { Post } from '@/models/Post';
+import { PostRepository as PostRepositoryInterface } from '@/dao/Repositories';
 
 @injectable()
 export class PostRepository

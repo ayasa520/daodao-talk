@@ -2,9 +2,9 @@ import { inject, injectable } from 'inversify';
 import dotenv from 'dotenv';
 
 import logger from '@/utils/logger';
-import { Config } from '@/config/config';
 import TYPES from '@/constants/TYPES';
-import { DataBaseConnection } from '@/utils/database';
+import { DataBaseConnection } from '@/utils/DataBaseConnection';
+import { Config } from '@/config/Config';
 
 @injectable()
 export class ServerConfigurer extends Config {

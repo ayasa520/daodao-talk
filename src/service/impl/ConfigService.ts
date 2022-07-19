@@ -2,9 +2,9 @@ import path from 'path';
 import * as fs from 'fs';
 import { inject, injectable } from 'inversify';
 
-import { Config as ConfigType } from '@/models/config.model';
-import { Config } from '@/config/config';
-import { Vercel } from '@/utils/vercel';
+import { Config as ConfigType } from '@/models/Config';
+import { Config } from '@/config/Config';
+import { VercelAPI } from '@/utils/VercelAPI';
 import TYPES from '@/constants/TYPES';
 import { ConfigService as ConfigServiceInterface } from '@/service/ConfigService';
 
@@ -13,7 +13,7 @@ export class ConfigService implements ConfigServiceInterface {
   // eslint-disable-next-line no-useless-constructor
   public constructor(
     @inject(TYPES.Configurer) private configurer: Config,
-    @inject(TYPES.Vercel) private vercel: Vercel
+    @inject(TYPES.Vercel) private vercel: VercelAPI
   ) {}
 
   public async createConfig(input: ConfigType) {

@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 import { inject, injectable } from 'inversify';
 
 import TYPES from '@/constants/TYPES';
-import { Config } from '@/config/config';
+import { Config } from '@/config/Config';
 
 // import dotenv from 'dotenv';
 

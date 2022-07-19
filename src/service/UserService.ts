@@ -1,6 +1,6 @@
 import { FilterQuery } from 'mongoose';
 
-import { User, UserLean } from '@/models/user.model';
+import { User, UserLean } from '@/models/User';
 
 export interface UserService {
   createUser(

@@ -3,10 +3,10 @@ import bcrypt from 'bcrypt';
 import { omit } from 'lodash';
 import { inject, injectable } from 'inversify';
 
-import { User, UserLean } from '@/models/user.model';
+import { User, UserLean } from '@/models/User';
 import logger from '@/utils/logger';
 import TYPES from '@/constants/TYPES';
-import { UserRepository } from '@/dao/repositories';
+import { UserRepository } from '@/dao/Repositories';
 import { UserService as UserServiceInterface } from '@/service/UserService';
 
 @injectable()
@@ -37,7 +37,8 @@ export class UserService implements UserServiceInterface {
 
     const isValid = await bcrypt
       .compare(password, user.password)
-      .catch((error) => logger.error(error));
+      .catch((error) =>
+        logger.error(error));
 
     return isValid ? omit(user, 'password') : null;
   }

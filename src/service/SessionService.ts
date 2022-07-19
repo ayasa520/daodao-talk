@@ -1,7 +1,7 @@
 import { FilterQuery, UpdateQuery } from 'mongoose';
 
-import { Session } from '@/models/session.model';
-import { UpdateResult } from '@/dao/repositories';
+import { Session } from '@/models/Session';
+import { UpdateResult } from '@/dao/Repositories';
 
 export interface SessionService {
   createSession(

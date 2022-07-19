@@ -9,7 +9,7 @@ import {
 import { inject } from 'inversify';
 
 import logger from '@/utils/logger';
-import { CreateUserInput } from '@/schema/user.schema';
+import { CreateUserInput } from '@/schema/UserSchema';
 import { validateSchemaSym as validateSchema } from '@/middleware/validate';
 import SCHEMAS from '@/constants/SCHEMAS';
 import TYPES from '@/constants/TYPES';

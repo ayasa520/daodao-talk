@@ -5,7 +5,8 @@ const logger = pino({
   base: {
     pid: false,
   },
-  timestamp: () => `,"time":"${dayjs().format()}"`,
+  timestamp: () =>
+    `,"time":"${dayjs().format()}"`,
 });
 
 export default logger;

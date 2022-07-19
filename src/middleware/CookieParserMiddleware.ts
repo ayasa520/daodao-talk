@@ -1,13 +1,11 @@
 import express from 'express';
 import _cookieParser, { CookieParseOptions } from 'cookie-parser';
 import { BaseMiddleware } from 'inversify-express-utils';
-import { inject } from 'inversify';
 
-import { Config } from '@/config/config';
+import { Config } from '@/config/Config';
 import logger from '@/utils/logger';
-import TYPES from '@/constants/TYPES';
 
-export function cookieParser(secretConfigKey: symbol): symbol {
+export function cookieParserMiddleware(secretConfigKey: symbol): symbol {
   return secretConfigKey;
 }
 

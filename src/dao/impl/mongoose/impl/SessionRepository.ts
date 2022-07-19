@@ -1,9 +1,9 @@
 import { injectable } from 'inversify';
 import mongoose from 'mongoose';
 
-import { GenericRepository } from '@/dao/impl/mongoose/repository';
-import { Session } from '@/models/session.model';
-import { SessionRepository as SessionRepositoryInterface } from '@/dao/repositories';
+import { GenericRepository } from '@/dao/impl/mongoose/GenericRepository';
+import { Session } from '@/models/Session';
+import { SessionRepository as SessionRepositoryInterface } from '@/dao/Repositories';
 
 @injectable()
 export class SessionRepository

@@ -8,9 +8,9 @@ import {
   request, response
 } from 'inversify-express-utils';
 
-import { Config } from '@/config/config';
-import { CreateConfigInput } from '@/schema/config.shema';
-import { auth } from '@/middleware/auth';
+import { Config } from '@/config/Config';
+import { CreateConfigInput } from '@/schema/ConfigShema';
+import { authMiddleware } from '@/middleware/AuthMiddleware';
 import CONFIGS from '@/constants/CONFIGS';
 import { validateSchemaSym as validateSchema } from '@/middleware/validate';
 import SCHEMAS from '@/constants/SCHEMAS';
@@ -25,7 +25,7 @@ export class ConfigController implements Controller {
     @inject(TYPES.ConfigService) private configService: ConfigService
   ) {}
 
-  @httpGet('/', auth(CONFIGS.admin))
+  @httpGet('/', authMiddleware(CONFIGS.admin))
   public async getConfigHandler(
     @request() req: Request,
     @response() res: Response

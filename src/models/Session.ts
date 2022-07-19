@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-import { User } from '@/models/user.model';
+import { User } from '@/models/User';
 
 // Session 存储起来的作用是使用 refreshToken 获取新的 accessToken 时确保有效
 // 1. Create an interface representing a document in MongoDB.
