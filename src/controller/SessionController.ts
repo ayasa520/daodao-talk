@@ -7,6 +7,8 @@ import {
   httpGet,
   httpPost,
   request,
+  requestBody,
+  requestHeaders,
   response,
 } from 'inversify-express-utils';
 import { inject } from 'inversify';
@@ -20,6 +22,7 @@ import SCHEMAS from '@/constants/SCHEMAS';
 import { UserService } from '@/service/UserService';
 import { authMiddleware } from '@/middleware/AuthMiddleware';
 import { JwtUtils } from '@/utils/JwtUtils';
+import { Login } from '@/models/User';
 
 @controller('/api/sessions')
 export class SessionController implements Controller {
@@ -33,11 +36,12 @@ export class SessionController implements Controller {
 
   @httpPost('/', validateSchema(SCHEMAS.createSessionSchema))
   public async createSessionHandler(
-    @request() req: Request,
-    @response() res: Response
+    @response() res: Response,
+    @requestBody() login: Login,
+    @requestHeaders('user-agent') userAgent: string
   ) {
     // Validate the user's password
-    const user = await this.userService.validatePassword(req.body);
+    const user = await this.userService.validatePassword(login);
     if (!user) {
       return res.status(401).send('Invalid email or password');
     }
@@ -45,7 +49,7 @@ export class SessionController implements Controller {
     const { _id } = user;
     const session = await this.sessionService.createSession(
       _id.toString(),
-      req.get('user-agent') || ''
+      userAgent || ''
     );
     // create access token
 

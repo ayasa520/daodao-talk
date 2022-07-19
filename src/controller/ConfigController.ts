@@ -5,11 +5,13 @@ import {
   controller,
   httpGet,
   httpPost,
-  request, response
+  request,
+  requestBody,
+  response,
 } from 'inversify-express-utils';
 
+import { Config as ConfigType } from '@/models/Config';
 import { Config } from '@/config/Config';
-import { CreateConfigInput } from '@/schema/ConfigShema';
 import { authMiddleware } from '@/middleware/AuthMiddleware';
 import CONFIGS from '@/constants/CONFIGS';
 import { validateSchemaSym as validateSchema } from '@/middleware/validate';
@@ -40,14 +42,14 @@ export class ConfigController implements Controller {
 
   @httpPost('/', validateSchema(SCHEMAS.createConfigSchema))
   public async createConfigController(
-    @request() req: Request<unknown, unknown, CreateConfigInput['body']>,
+    @requestBody() configInput: ConfigType,
     @response() res: Response
   ) {
     if (this.configurer.check()) {
       return res.send('已经配置完毕, 无需重新配置');
     }
     try {
-      await this.configService.createConfig(req.body);
+      await this.configService.createConfig(configInput);
       return res.send('已经配置完毕');
     } catch (e) {
       return res.status(500).send(e);

@@ -5,7 +5,7 @@ import { inject, injectable } from 'inversify';
 
 import TYPES from '@/constants/TYPES';
 import { PostRepository } from '@/dao/Repositories';
-import { Post } from '@/models/Post';
+import { NewPost, Post } from '@/models/Post';
 import { PostService as PostServiceInterface } from '@/service/PostService';
 
 @injectable()
@@ -16,7 +16,7 @@ export class PostService implements PostServiceInterface {
   ) {}
 
   public async createPost(
-    input: Omit<Post, 'valid' | 'replies' | 'createdAt' | 'updatedAt'>
+    input: NewPost
   ) {
     const newPost = await this.postRepository.save({
       ...omit(input, 'content'),

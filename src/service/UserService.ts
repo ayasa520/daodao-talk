@@ -1,19 +1,13 @@
 import { FilterQuery } from 'mongoose';
 
-import { User, UserLean } from '@/models/User';
+import {
+  Login, NewUser, User, UserLean
+} from '@/models/User';
 
 export interface UserService {
-  createUser(
-    input: Omit<User, 'createdAt' | 'updatedAt' | '_id'>
-  ): Promise<UserLean>;
+  createUser(input: NewUser): Promise<UserLean>;
 
-  validatePassword({
-    email,
-    password
-  }: {
-    email: string;
-    password: string;
-  }): Promise<UserLean | null>;
+  validatePassword({ email, password }: Login): Promise<UserLean | null>;
 
   findUser(query: FilterQuery<User>): Promise<UserLean | null>;
 }

@@ -15,6 +15,7 @@ const TYPES = {
   JwtUtils: Symbol.for('JwtUtils'),
   ConfigController: Symbol.for('ConfigController'),
   SessionController: Symbol.for('SessionController'),
+  HealthCheckController: Symbol.for('HealthCheckController'),
   PostController: Symbol.for('PostController'),
   UserController: Symbol.for('UserController'),
   Controller: Symbol.for('Controller'),

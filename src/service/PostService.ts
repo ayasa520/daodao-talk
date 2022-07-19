@@ -1,11 +1,11 @@
 import { FilterQuery, PopulatedDoc } from 'mongoose';
 
-import { Post } from '@/models/Post';
+import { NewPost, Post } from '@/models/Post';
 import { UpdateResult } from '@/dao/Repositories';
 
 export interface PostService {
   createPost(
-    input: Omit<Post, 'valid' | 'replies' | 'createdAt' | 'updatedAt'>
+    input: NewPost
   ): Promise<Post | undefined>;
 
   findPost(postId: string): Promise<Post | null>;

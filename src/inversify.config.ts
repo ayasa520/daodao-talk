@@ -21,7 +21,10 @@ import { ServerConfigurer } from '@/config/SeverConfigurer';
 import { VercelAPI } from '@/utils/VercelAPI';
 import { CookieParserMiddleware } from '@/middleware/CookieParserMiddleware';
 import { CorsMiddleware } from '@/middleware/CorsMiddleware';
-import { DataBaseConnection, MongoDBConnection } from '@/utils/DataBaseConnection';
+import {
+  DataBaseConnection,
+  MongoDBConnection,
+} from '@/utils/DataBaseConnection';
 import { UserRepository } from '@/dao/impl/mongoose/impl/UserRepository';
 import { SessionRepository } from '@/dao/impl/mongoose/impl/SessionRepository';
 import { PostRepository } from '@/dao/impl/mongoose/impl/PostRepository';
@@ -41,6 +44,7 @@ import { SessionController } from '@/controller/SessionController';
 import { PostService } from '@/service/impl/PostService';
 import { registerController } from '@/utils/registerController';
 import { VercelMiddleware } from '@/middleware/VercelMiddleware';
+import { HealthCheck } from '@/controller/HealthCheck';
 
 // 这真的值得吗? 我不知道. 我只是想在 controller 里面注入中间件, 但是不想用 container 传入 controller
 
@@ -68,12 +72,14 @@ export const bindings = new ContainerModule((bind) => {
     CONFIGS.user,
   ].forEach((conf) => {
     bind<BaseMiddleware>(conf)
-      .toDynamicValue((context) =>
-        // logger.info(context.container.get<Config>(TYPES.Configurer).check());
-        new AuthMiddleware(
-          context.container.get<Config>(TYPES.Configurer),
-          conf
-        ))
+      .toDynamicValue(
+        (context) =>
+          // logger.info(context.container.get<Config>(TYPES.Configurer).check());
+          new AuthMiddleware(
+            context.container.get<Config>(TYPES.Configurer),
+            conf
+          )
+      )
       .inRequestScope();
   });
 
@@ -151,6 +157,7 @@ export const bindings = new ContainerModule((bind) => {
   registerController(bind, UserController, TYPES.UserController);
   registerController(bind, PostController, TYPES.PostController);
   registerController(bind, SessionController, TYPES.SessionController);
+  registerController(bind, HealthCheck, TYPES.HealthCheckController);
 });
 
 const container = new Container();

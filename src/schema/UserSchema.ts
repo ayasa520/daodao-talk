@@ -28,11 +28,11 @@ export const createUserSchema = object({
 }).describe('createUserSchema');
 
 // Omit 无法直接处理嵌套的类型
-type ChangeFields<T, R> = Omit<T, keyof R> & R;
-
-export type CreateUserInput = ChangeFields<
-  TypeOf<typeof createUserSchema>,
-  {
-    body: Omit<TypeOf<typeof createUserSchema>['body'], 'passwordConfirmation'>;
-  }
->;
+// type ChangeFields<T, R> = Omit<T, keyof R> & R;
+//
+// export type CreateUserInput = ChangeFields<
+//   TypeOf<typeof createUserSchema>,
+//   {
+//     body: Omit<TypeOf<typeof createUserSchema>['body'], 'passwordConfirmation'>;
+//   }
+// >;

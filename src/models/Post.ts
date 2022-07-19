@@ -15,3 +15,10 @@ export interface Post {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export type NewPost = Omit<
+  Post,
+  '_id' | 'valid' | 'replies' | 'createdAt' | 'updatedAt'
+>;
+
+export type InputPost = Pick<Post, 'rid' | 'pid' | 'content'>;

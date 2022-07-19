@@ -6,13 +6,14 @@ import {
   httpGet,
   httpPost,
   request,
+  requestBody,
+  requestHeaders,
   requestParam,
   response,
 } from 'inversify-express-utils';
 import { inject } from 'inversify';
 
-import { CreatePostInput } from '@/schema/PostSchema';
-import { Post } from '@/models/Post';
+import { InputPost } from '@/models/Post';
 import { validateSchemaSym as validateSchema } from '@/middleware/validate';
 import SCHEMAS from '@/constants/SCHEMAS';
 import { authMiddleware } from '@/middleware/AuthMiddleware';
@@ -37,12 +38,12 @@ export class PostController implements Controller {
     })
   )
   public async createPostsHandler(
-    @request() req: Request<unknown, unknown, CreatePostInput['body']>,
+    @requestBody() post: InputPost,
+    @requestHeaders('user-agent') ua: string,
     @response() res: Response
   ) {
     const { uid } = res.locals.user;
-    const ua = req.get('user-agent') as string;
-    const post = req.body as Post;
+    // const ua = req.get('user-agent') as string;
 
     const result = await this.postService.createPost({
       ...post,

@@ -23,5 +23,5 @@ export const deletePostSchema = object({
     path: ['postId'],
   }),
 }).describe('deletePostSchema');
-export type CreatePostInput = TypeOf<typeof createPostSchema>;
-export type DeletePostInput = TypeOf<typeof deletePostSchema>;
+// export type CreatePostInput = TypeOf<typeof createPostSchema>;
+// export type DeletePostInput = TypeOf<typeof deletePostSchema>;
