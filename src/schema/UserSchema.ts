@@ -1,6 +1,4 @@
-import {
-  boolean, object, string, TypeOf
-} from 'zod';
+import { object, string } from 'zod';
 
 // 对 body 做格式上的检验, 检查字段是否齐全 看起来像 @Validated和@Valid 之类的
 export const createUserSchema = object({
@@ -17,14 +15,14 @@ export const createUserSchema = object({
     email: string({
       required_error: 'Email is required',
     }).email('Not a valid email'),
-    admin: boolean({
-      required_error: 'Admin is required',
-    }),
-  }).refine((data) =>
-    data.password === data.passwordConfirmation, {
-    message: 'Password do not match',
-    path: ['passwordConfirmation'],
-  }),
+  }).refine(
+    (data) =>
+      data.password === data.passwordConfirmation,
+    {
+      message: 'Password do not match',
+      path: ['passwordConfirmation'],
+    }
+  ),
 }).describe('createUserSchema');
 
 // Omit 无法直接处理嵌套的类型

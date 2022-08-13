@@ -18,4 +18,4 @@ export type UserLean = Pick<
 
 export type Login = Pick<User, 'email' | 'password'>;
 
-export type NewUser = Omit<User, 'createdAt' | 'updatedAt' | '_id'>;
+export type NewUser = Omit<User, 'createdAt' | 'updatedAt' | '_id' | 'admin'>;

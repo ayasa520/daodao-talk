@@ -1,12 +1,13 @@
 import { injectable, unmanaged } from 'inversify';
 import mongoose, {
+  AnyKeys,
   PopulatedDoc,
   UpdateQuery,
   UpdateWithAggregationPipeline,
 } from 'mongoose';
+import { get } from 'lodash';
 
 import { Query, Repository, UpdateResult } from '@/dao/Repositories';
-import { get } from 'lodash';
 
 /**
  * 包装 mongoose 的目的只有一个: 将 service 与数据库操作解耦, 之后换其他的驱动或者腾讯云开发数据库都能容易地扩展
@@ -29,7 +30,7 @@ export class GenericRepository<TEntity> implements Repository<TEntity> {
     return this.Model.findById(id);
   }
 
-  public async save(doc: TEntity): Promise<TEntity> {
+  public async save(doc: AnyKeys<TEntity> | TEntity): Promise<TEntity> {
     const newEntity = await this.Model.create(doc);
     return get(newEntity, '_doc');
   }

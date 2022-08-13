@@ -10,6 +10,8 @@ import TYPES from '@/constants/TYPES';
 import { DeserializeUser } from '@/middleware/DeserializeUser';
 import { container } from '@/inversify.config';
 import { VercelMiddleware } from '@/middleware/VercelMiddleware';
+import { DataBaseConnection } from '@/utils/DataBaseConnection';
+import { Config } from '@/config/Config';
 
 const server = new InversifyExpressServer(container);
 
@@ -37,8 +39,22 @@ server.setConfig(
 );
 
 const app = server.build();
+const dbClient = container.get<DataBaseConnection>(TYPES.DBClient);
+const configurer = container.get<Config>(TYPES.Configurer);
+
 app.listen(5000, () => {
   logger.info('服务器启动');
 });
+
+(async () => {
+  try {
+    await configurer.load();
+    logger.info('配置已经读取');
+    await dbClient.connect();
+    logger.info('数据库连接');
+  } catch (e) {
+    logger.error(e);
+  }
+})();
 
 export default app;

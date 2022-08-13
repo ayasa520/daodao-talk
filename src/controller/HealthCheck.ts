@@ -10,11 +10,14 @@ import { inject } from 'inversify';
 
 import TYPES from '@/constants/TYPES';
 import { Config } from '@/config/Config';
+import logger from '@/utils/logger';
 
 @controller('/healthcheck')
 export class HealthCheck implements Controller {
   // eslint-disable-next-line no-useless-constructor
-  public constructor(@inject(TYPES.Configurer) private configurer: Config) {}
+  public constructor(@inject(TYPES.Configurer) private configurer: Config) {
+    logger.info('controller 构造');
+  }
 
   @httpGet('/')
   public async getConfigHandler(

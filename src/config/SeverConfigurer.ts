@@ -1,37 +1,40 @@
 import { inject, injectable } from 'inversify';
-import dotenv from 'dotenv';
+import fs from 'fs';
+import YAML from 'yaml';
+import path from 'path';
 
 import logger from '@/utils/logger';
-import TYPES from '@/constants/TYPES';
-import { DataBaseConnection } from '@/utils/DataBaseConnection';
+import { Config as ConfigType } from '@/models/Config';
 import { Config } from '@/config/Config';
 
 @injectable()
 export class ServerConfigurer extends Config {
-  public constructor(
-    @inject(TYPES.DbClient) protected dBClient: DataBaseConnection
-  ) {
+  public constructor() {
     super();
-    logger.info('构造');
-    this.load().then(() => {
-      logger.info('启动');
-    });
+    // logger.info('构造');
+    // this.load().then(() => {
+    //   logger.info('启动');
+    // });
   }
 
-  public async load() {
-    let parsed: dotenv.DotenvParseOutput = {};
-    // 在服务器部署
-    // 存在 .env 文件
-    logger.info('服务器环境');
-    const dotenvConfigOutput = dotenv.config({ override: true });
-    if (dotenvConfigOutput.parsed) {
-      parsed = dotenvConfigOutput.parsed;
+  // eslint-disable-next-line class-methods-use-this
+  public async fetchSettings(): Promise<ConfigType | undefined> {
+    const confPath = path.resolve(process.cwd(), 'config.yml');
+    try {
+      const buffer = fs.readFileSync(confPath, 'utf8');
+      return YAML.parse(buffer);
+    } catch (err) {
+      logger.info(err);
     }
-    if (parsed) {
-      Object.keys(parsed).forEach((key) => {
-        this.configMap.set(key, parsed[key]);
-      });
+    return undefined;
+  }
+
+  public async save(): Promise<void> {
+    const confPath = path.resolve(process.cwd(), 'config.yml');
+    try {
+      fs.writeFileSync(confPath, YAML.stringify(this));
+    } catch (err) {
+      logger.info(err);
     }
-    await this.dBClient.connect(this.configMap.get('DB_CONN_STRING') as string);
   }
 }

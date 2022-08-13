@@ -3,7 +3,7 @@ const TYPES = {
   // 配置器的抽象类型
   Configurer: Symbol.for('Configurer'),
   Vercel: Symbol.for('Vercel'),
-  DbClient: Symbol.for('DbClient'),
+  DBClient: Symbol.for('DbClient'),
   PostRepository: Symbol.for('PostRepository'),
   SessionRepository: Symbol.for('SessionRepository'),
   UserRepository: Symbol.for('UserRepository'),

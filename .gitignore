@@ -105,3 +105,4 @@ dist
 .vercel
 .idea
 production.json
+config.yml

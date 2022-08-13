@@ -37,7 +37,7 @@ export class ConfigController implements Controller {
       return res.status(500).send('配置未完成');
       // 前端跳配置页
     }
-    return res.send(this.configurer.toJSON());
+    return res.send(this.configurer);
   }
 
   @httpPost('/', validateSchema(SCHEMAS.createConfigSchema))

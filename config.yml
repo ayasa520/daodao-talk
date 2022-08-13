@@ -1,0 +1,25 @@
+database:
+  uri: mongodb+srv://rikka:o0lX1zGRmsMq7iRU@cluster0.fznke.mongodb.net/daodao?retryWrites=true&w=majority
+
+origin:
+  - http://localhost:8080
+
+cookieSecret: G9w0BAQEFAAOCAQ8AMIIBCgKCAQ
+
+jwt:
+  secret: qhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA28n6FxwsnF
+  accessTokenTTL: 15m
+  refreshTokenTTL: 365d
+
+
+permission:
+  # 发送新说说
+  post: admin
+  # 发送评论
+  comment: user
+  # 查看所有内容
+  get: all
+  # 删除评论或者说说
+  delete: user
+
+

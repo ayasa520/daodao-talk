@@ -13,7 +13,7 @@ import { validateSchemaSym as validateSchema } from '@/middleware/validate';
 import SCHEMAS from '@/constants/SCHEMAS';
 import TYPES from '@/constants/TYPES';
 import { UserService } from '@/service/UserService';
-import { NewUser } from '@/models/User';
+import { NewUser, User } from '@/models/User';
 
 @controller('/api/users')
 export class UserController implements Controller {
@@ -29,7 +29,7 @@ export class UserController implements Controller {
   ) {
     try {
       const user = await this.userService.createUser(newUser);
-      logger.info(user);
+      logger.info((newUser as User));
       return res.send(user);
     } catch (error: any) {
       logger.error(error);

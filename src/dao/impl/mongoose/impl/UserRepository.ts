@@ -17,7 +17,7 @@ export class UserRepository
         email: { type: String, required: true, unique: true },
         name: { type: String, required: true },
         password: { type: String, required: true },
-        admin: { type: Boolean, required: true },
+        admin: { type: Boolean, required: true, default: false },
       },
       {
         timestamps: true,

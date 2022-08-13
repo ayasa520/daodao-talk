@@ -1,4 +1,4 @@
-import { object, string, TypeOf } from 'zod';
+import { object, string } from 'zod';
 import { isValidObjectId } from 'mongoose';
 
 // 给 validate 用的

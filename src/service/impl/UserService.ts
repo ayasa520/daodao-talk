@@ -19,7 +19,17 @@ export class UserService implements UserServiceInterface {
   ) {}
 
   public async createUser(input: NewUser): Promise<UserLean> {
-    const user = await this.userRepository.save(input);
+    const users = (await this.userRepository.findAll()) as User[];
+    // 第一个注册的用户为管理员
+    const user = users.length === 0
+      ? await this.userRepository.save({
+        ...omit(input, 'admin'),
+        admin: true,
+      })
+      : await this.userRepository.save({
+        ...omit(input, 'admin'),
+        admin: false,
+      });
     // 一个坑点, 这里实际上的对象不会发生字段的改变!!! 相当于 as 不会使转换前的对象字段发生改变
     // 举例: interface A { a: string }
     // const aaa:A = {a:'213', b:'123123'} as A

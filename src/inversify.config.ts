@@ -60,7 +60,7 @@ export const bindings = new ContainerModule((bind) => {
   }
 
   bind<VercelAPI>(TYPES.Vercel).to(VercelAPI).inSingletonScope();
-  bind<DataBaseConnection>(TYPES.DbClient)
+  bind<DataBaseConnection>(TYPES.DBClient)
     .to(MongoDBConnection)
     .inSingletonScope();
 

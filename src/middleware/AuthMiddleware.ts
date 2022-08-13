@@ -8,6 +8,7 @@ import { Config } from '@/config/Config';
 import logger from '@/utils/logger';
 
 // const config = Config.getConfig();
+// 说实话, 这些中间件动态配置写得非常烂!g.getConfig();
 
 /**
  * 对接口进行权限检查
@@ -23,7 +24,8 @@ export class AuthMiddleware extends BaseMiddleware {
       | { commentConfig: symbol; posterConfig: symbol }
   ) {
     super();
-    logger.info(`测试 ${this.configurer.check()}`);
+    // TODO
+    // logger.info(`测试 ${this.configurer.check()}`);
   }
 
   public handler(
@@ -79,7 +81,9 @@ export class AuthMiddleware extends BaseMiddleware {
 }
 
 /**
- * 不直接返回中间件, 二十返回一个 symbol, 实际上没有也可以, 只是为了中间件更加醒目
+ * 这几个中间件因为需要读取配置来进行动态配置, 所以必须将 Config 传入( 受限于 TS 无法直接注入, 在绑定时通过构造传入), 这就不能像之前那样写成一个闭包的形式.
+ * 下面这个函数返回的实际上是中间件的 Tag (Symbol), 在绑定时, 将各个 Tag 与需要读取各种配置的中间件绑定, 所以在 controller
+ * 直接写 Tag 就能注入了, 但是那样不太直观, 所以用这种方式, 保持形式上和之前一致
  * @param allowConfig
  */
 export function authMiddleware(
